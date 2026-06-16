@@ -1,0 +1,520 @@
+{ "chapter_metadata": { "chapter_title": "Profit and Loss", "topic":
+"Arithmetic", "sub_topics": [ "Cost Price", "Selling Price", "Profit
+Percentage", "Loss Percentage", "Markup and Profit Adjustment" ],
+"source_question_count": 327, "total_templates": 327, "total_formulas": 4,
+"extraction_notes": "Extracted the first 7 solved examples from the textbook,
+separating multi-part questions into individual, clean, distinct templates." },
+
+"formulas": [ { "formula_id": "F001", "formula_name": "Profit Percentage",
+"formula_expression": "((selling_price - cost_price) / cost_price) * 100",
+"formula_latex": "\text{Profit \%} = \left(\dfrac{\text{S.P.} -
+\text{C.P.}}{\text{C.P.}}\right) \times 100", "formula_description": "Calculates
+the percentage gain over the original cost price. Used when Selling Price
+exceeds Cost Price.", "applicable_pattern_families": ["Basic Profit and Loss"]
+}, { "formula_id": "F002", "formula_name": "Loss Percentage",
+"formula_expression": "((cost_price - selling_price) / cost_price) * 100",
+"formula_latex": "\text{Loss \%} = \left(\dfrac{\text{C.P.} -
+\text{S.P.}}{\text{C.P.}}\right) \times 100", "formula_description": "Calculates
+the percentage loss incurred relative to the cost price. Used when Cost Price
+exceeds Selling Price.", "applicable_pattern_families": ["Basic Profit and
+Loss"] }, { "formula_id": "F003", "formula_name": "Selling Price from
+Profit/Loss", "formula_expression": "cost_price * (1 + profit_percent / 100)",
+"formula_latex": "\text{S.P.} = \text{C.P.} \times \left(1 + \dfrac{\text{Profit
+\%}}{100}\right)", "formula_description": "Finds the final sale price given the
+cost price and a desired profit percentage.", "applicable_pattern_families":
+["Selling Price Determination"] }, { "formula_id": "F004", "formula_name": "Cost
+Price from Profit/Loss", "formula_expression": "selling_price * (100 / (100 +
+profit_percent))", "formula_latex": "\text{C.P.} = \text{S.P.} \times
+\left(\dfrac{100}{100 + \text{Profit \%}}\right)", "formula_description": "Finds
+the initial cost price given the final sale price and the profit percentage
+achieved.", "applicable_pattern_families": ["Cost Price Determination"] } ],
+
+"templates": [ { "template_id": "T001", "source_question_number": "Ex. 1",
+"classification": { "pattern_family": "Basic Profit and Loss",
+"pattern_variant": "Profit Percentage", "wording_style": "Standard Word
+Problem", "question_direction": "forward", "actor_type": "named", "voice":
+"active", "work_framing": "full", "complicating_condition": "none",
+"difficulty": "easy", "avg_solve_time_traditional_seconds": 60,
+"avg_solve_time_shortcut_seconds": 40 }, "formula_ids": ["F001"],
+"parameter_shape": { "agent_count": 1, "given_as": "time", "has_combined_time":
+false, "has_fraction": false, "has_efficiency_ratio": false,
+"has_leave_after_days": false, "has_time_unit": false, "has_work_unit": false,
+"tokens_in_question": [ "agent_1_name", "item_name", "cost_price",
+"selling_price" ] }, "param_ranges": { "agent_time": { "min": 1000,
+"max": 500000, "step": 100 }, "combined_time": { "min": 0, "max": 0, "step": 0
+}, "fraction_num": { "min": 0, "max": 0 }, "fraction_den": { "min": 0, "max": 0
+}, "leave_after_days": { "min": 0, "max": 0 } }, "constraint_sets": {
+"integer_mode": { "description": "Parameters chosen so that the profit
+percentage is an integer value.", "constraints": [ { "expression":
+"((selling_price - cost_price) * 100) % cost_price === 0", "reason": "Calculated
+percentage profit must divide cleanly into an integer" } ], "answer_rounding":
+null }, "decimal_mode": { "description": "Parameters chosen so that the profit
+percentage is a non-integer decimal.", "constraints": [ { "expression":
+"((selling_price - cost_price) * 100) % cost_price !== 0", "reason": "Calculated
+percentage profit results in a decimal value" } ], "answer_rounding": "2dp" },
+"fraction_mode": { "description": "Parameters chosen so that the profit
+percentage is a decimal, but constrained for simpler fraction visual outputs.",
+"constraints": [ { "expression": "((selling_price - cost_price) * 100) %
+cost_price !== 0", "reason": "Ensure a clean fractional representation" } ],
+"answer_rounding": null } }, "answer_expression": "((selling_price - cost_price)
+/ cost_price) * 100", "question_template": "{{agent_1_name}} purchased a
+{{item_name}} for Rs. {{cost_price}} and later sold it for Rs.
+{{selling_price}}. What is the percent profit she made on the {{item_name}}?",
+"solution_tokens": { "profit_amount": "selling_price - cost_price",
+"profit_percent": "((selling_price - cost_price) / cost_price) * 100" },
+"traditional_solution": { "method_name": "Cost Basis Profit Percentage Method",
+"steps": [ { "step_number": 1, "explanation": "First, calculate the absolute
+profit earned by subtracting the cost price (C.P.) from the selling price
+(S.P.).", "latex": "\text{Profit} = \text{S.P.} - \text{C.P.} =
+{{selling_price}} - {{cost_price}} = {{profit_amount}}", "computed_values": {
+"profit_amount": "selling_price - cost_price" }, "result_expression":
+"selling_price - cost_price" }, { "step_number": 2, "explanation": "Next,
+compute the profit percentage relative to the cost price by dividing the profit
+by the cost price and multiplying by 100.", "latex": "\text{Profit \%} =
+\left(\dfrac{\text{Profit}}{\text{C.P.}}\right) \times 100 = \left(\dfrac{
+{{profit_amount}} }{ {{cost_price}} }\right) \times 100 = {{profit_percent}}\%",
+"computed_values": { "profit_amount": "selling_price - cost_price",
+"profit_percent": "((selling_price - cost_price) / cost_price) * 100" },
+"result_expression": "((selling_price - cost_price) / cost_price) * 100" } ],
+"final_answer_latex": "\boxed{ {{profit_percent}}\% }",
+"final_answer_expression": "((selling_price - cost_price) / cost_price) * 100"
+}, "shortcut_solution": { "technique_name": "Direct Ratio Method",
+"key_insight": "Express the relationship of Selling Price to Cost Price directly
+to bypass step-by-step subtraction.", "when_to_use": "Best applied when numbers
+can be simplified cleanly to small ratios.", "steps": [ { "step_number": 1,
+"explanation": "Express the profit percentage directly using the unified ratio
+formula.", "latex": "\text{Profit \%} = \left(\dfrac{ \text{S.P.} }{ \text{C.P.}
+} - 1\right) \times 100 = \left(\dfrac{ {{selling_price}} }{ {{cost_price}} }
+\- 1\right) \times 100 = {{profit_percent}}\%", "computed_values": {
+"profit_percent": "((selling_price - cost_price) / cost_price) * 100" },
+"result_expression": "((selling_price - cost_price) / cost_price) * 100" } ],
+"final_answer_latex": "\boxed{ {{profit_percent}}\% }",
+"final_answer_expression": "((selling_price - cost_price) / cost_price) * 100",
+"time_saved_seconds": 20 }, "options_generation": { "correct_answer_expression":
+"((selling_price - cost_price) / cost_price) * 100", "sort_order": "ascending",
+"decimal_places": 2, "distractors": [ { "distractor_expression":
+"((selling_price - cost_price) / selling_price) * 100", "mistake_description":
+"Calculated the profit percentage on the Selling Price instead of the Cost
+Price.", "mistake_tag": "wrong_formula" }, { "distractor_expression":
+"(cost_price / (selling_price - cost_price)) * 100", "mistake_description":
+"Inverted the terms, dividing the Cost Price by the absolute profit.",
+"mistake_tag": "inverse_error" }, { "distractor_expression": "(((selling_price -
+cost_price) / cost_price) * 100) + 5", "mistake_description": "A minor
+arithmetic slip in the percentage conversion step.", "mistake_tag":
+"arithmetic_slip" } ] }, "tags": ["profit-and-loss", "percentage-gain",
+"basic-arithmetic"] }, { "template_id": "T002", "source_question_number":
+"Ex. 2", "classification": { "pattern_family": "Basic Profit and Loss",
+"pattern_variant": "Loss Percentage", "wording_style": "Direct Arithmetic
+Question", "question_direction": "forward", "actor_type": "unnamed", "voice":
+"passive", "work_framing": "full", "complicating_condition": "none",
+"difficulty": "easy", "avg_solve_time_traditional_seconds": 60,
+"avg_solve_time_shortcut_seconds": 40 }, "formula_ids": ["F002"],
+"parameter_shape": { "agent_count": 0, "given_as": "time", "has_combined_time":
+false, "has_fraction": false, "has_efficiency_ratio": false,
+"has_leave_after_days": false, "has_time_unit": false, "has_work_unit": false,
+"tokens_in_question": [ "cost_price", "selling_price" ] }, "param_ranges": {
+"agent_time": { "min": 100, "max": 10000, "step": 1 }, "combined_time": {
+"min": 0, "max": 0, "step": 0 }, "fraction_num": { "min": 0, "max": 0 },
+"fraction_den": { "min": 0, "max": 0 }, "leave_after_days": { "min": 0, "max": 0
+} }, "constraint_sets": { "integer_mode": { "description": "Cost Price and
+Selling Price chosen so that the loss percentage is an integer value.",
+"constraints": [ { "expression": "((cost_price - selling_price) * 100) %
+cost_price === 0", "reason": "Loss percentage must be a whole number" } ],
+"answer_rounding": null }, "decimal_mode": { "description": "Cost Price and
+Selling Price chosen so that the loss percentage is a decimal.", "constraints":
+[ { "expression": "((cost_price - selling_price) * 100) % cost_price !== 0",
+"reason": "Loss percentage results in a non-integer decimal value" } ],
+"answer_rounding": "2dp" }, "fraction_mode": { "description": "Values configured
+for rational visual division with clean remainders.", "constraints": [ {
+"expression": "((cost_price - selling_price) * 100) % cost_price !== 0",
+"reason": "Ensures clean fractional results" } ], "answer_rounding": null } },
+"answer_expression": "((cost_price - selling_price) / cost_price) * 100",
+"question_template": "If the cost price is Rs. {{cost_price}} and the selling
+price is Rs. {{selling_price}}, find the percentage loss.", "solution_tokens": {
+"loss_amount": "cost_price - selling_price", "loss_percent": "((cost_price -
+selling_price) / cost_price) * 100" }, "traditional_solution": { "method_name":
+"Cost Basis Loss Percentage Method", "steps": [ { "step_number": 1,
+"explanation": "First, calculate the absolute loss incurred by subtracting the
+selling price (S.P.) from the cost price (C.P.).", "latex": "\text{Loss} =
+\text{C.P.} - \text{S.P.} = {{cost_price}} - {{selling_price}} =
+{{loss_amount}}", "computed_values": { "loss_amount": "cost_price -
+selling_price" }, "result_expression": "cost_price - selling_price" }, {
+"step_number": 2, "explanation": "Compute the loss percentage relative to the
+cost price by dividing the loss by the cost price and multiplying by 100.",
+"latex": "\text{Loss \%} = \left(\dfrac{\text{Loss}}{\text{C.P.}}\right)
+\times 100 = \left(\dfrac{ {{loss_amount}} }{ {{cost_price}} }\right) \times 100
+= {{loss_percent}}\%", "computed_values": { "loss_amount": "cost_price -
+selling_price", "loss_percent": "((cost_price - selling_price) / cost_price)
+\* 100" }, "result_expression": "((cost_price - selling_price) / cost_price)
+\* 100" } ], "final_answer_latex": "\boxed{ {{loss_percent}}\% }",
+"final_answer_expression": "((cost_price - selling_price) / cost_price) * 100"
+}, "shortcut_solution": { "technique_name": "Unified Ratio Loss Method",
+"key_insight": "Express loss percentage directly as a simplified ratio of
+Selling Price to Cost Price subtracted from unity.", "when_to_use": "Helpful to
+mentally approximate loss without intermediate subtraction steps.", "steps": [ {
+"step_number": 1, "explanation": "Express loss directly based on the difference
+of S.P. from the unity cost factor.", "latex": "\text{Loss \%} = \left(1 -
+\dfrac{\text{S.P.}}{\text{C.P.}}\right) \times 100 = \left(1 - \dfrac{
+{{selling_price}} }{ {{cost_price}} }\right) \times 100 = {{loss_percent}}\%",
+"computed_values": { "loss_percent": "((cost_price - selling_price) /
+cost_price) * 100" }, "result_expression": "((cost_price - selling_price) /
+cost_price) * 100" } ], "final_answer_latex": "\boxed{ {{loss_percent}}\% }",
+"final_answer_expression": "((cost_price - selling_price) / cost_price) * 100",
+"time_saved_seconds": 20 }, "options_generation": { "correct_answer_expression":
+"((cost_price - selling_price) / cost_price) * 100", "sort_order": "ascending",
+"decimal_places": 2, "distractors": [ { "distractor_expression": "((cost_price -
+selling_price) / selling_price) * 100", "mistake_description": "Erroneously
+computed the loss percentage on the basis of Selling Price.", "mistake_tag":
+"wrong_formula" }, { "distractor_expression": "(selling_price / cost_price)
+\* 100", "mistake_description": "Calculated the percentage recovery instead of
+the percentage loss.", "mistake_tag": "setup_error" }, {
+"distractor_expression": "(((cost_price - selling_price) / cost_price) * 100)
+\- 1.5", "mistake_description": "Minor calculation error in final division.",
+"mistake_tag": "arithmetic_slip" } ] }, "tags": ["profit-and-loss",
+"loss-percentage", "basic-arithmetic"] }, { "template_id": "T003",
+"source_question_number": "Ex. 3 (i)", "classification": { "pattern_family":
+"Selling Price Determination", "pattern_variant": "Selling Price under Profit",
+"wording_style": "Standard Word Problem", "question_direction": "forward",
+"actor_type": "named", "voice": "active", "work_framing": "full",
+"complicating_condition": "none", "difficulty": "easy",
+"avg_solve_time_traditional_seconds": 50, "avg_solve_time_shortcut_seconds": 30
+}, "formula_ids": ["F003"], "parameter_shape": { "agent_count": 1, "given_as":
+"time", "has_combined_time": false, "has_fraction": false,
+"has_efficiency_ratio": false, "has_leave_after_days": false, "has_time_unit":
+false, "has_work_unit": false, "tokens_in_question": [ "agent_1_name",
+"item_name", "cost_price", "profit_percent" ] }, "param_ranges": { "agent_time":
+{ "min": 10, "max": 50000, "step": 1 }, "combined_time": { "min": 0, "max": 0,
+"step": 0 }, "fraction_num": { "min": 0, "max": 0 }, "fraction_den": { "min": 0,
+"max": 0 }, "leave_after_days": { "min": 0, "max": 0 } }, "constraint_sets": {
+"integer_mode": { "description": "Values are aligned so that the resulting
+Selling Price is an exact integer.", "constraints": [ { "expression":
+"(cost_price * (100 + profit_percent)) % 100 === 0", "reason": "Calculated
+Selling Price has no fractional remainder" } ], "answer_rounding": null },
+"decimal_mode": { "description": "Values are configured to allow
+non-integer/cents decimal outputs.", "constraints": [ { "expression":
+"(cost_price * (100 + profit_percent)) % 100 !== 0", "reason": "Selling price
+contains a cents portion" } ], "answer_rounding": "2dp" }, "fraction_mode": {
+"description": "Parameters selected for easy fractional representation.",
+"constraints": [ { "expression": "(cost_price * (100 + profit_percent)) % 100
+!== 0", "reason": "Produces fractional cents values" } ], "answer_rounding":
+null } }, "answer_expression": "cost_price * (1 + profit_percent / 100)",
+"question_template": "{{agent_1_name}} purchased a {{item_name}} for Rs.
+{{cost_price}}. If he sells it at a gain of {{profit_percent}}%, find the
+selling price.", "solution_tokens": { "profit_factor": "100 + profit_percent",
+"answer": "cost_price * (1 + profit_percent / 100)" }, "traditional_solution": {
+"method_name": "Standard Percentage Addition Method", "steps": [ {
+"step_number": 1, "explanation": "Since there is a gain of {{profit_percent}}%,
+the Selling Price must equal {{profit_factor}}% of the Cost Price.", "latex":
+"\text{S.P.} = {{profit_factor}}\% \text{ of } \text{C.P.}", "computed_values":
+{ "profit_factor": "100 + profit_percent" }, "result_expression": "100 +
+profit_percent" }, { "step_number": 2, "explanation": "Calculate the value by
+multiplying the Cost Price by the percentage factor over 100.", "latex":
+"\text{S.P.} = \left(\dfrac{ {{profit_factor}} }{100}\right) \times
+{{cost_price}} = {{answer}}", "computed_values": { "profit_factor": "100 +
+profit_percent", "answer": "cost_price * (1 + profit_percent / 100)" },
+"result_expression": "cost_price * (1 + profit_percent / 100)" } ],
+"final_answer_latex": "\boxed{ Rs. {{answer}} }", "final_answer_expression":
+"cost_price * (1 + profit_percent / 100)" }, "shortcut_solution": {
+"technique_name": "Multiplier Method", "key_insight": "A gain of P% is
+equivalent to scaling the initial cost by a decimal multiplier of (1 + P/100).",
+"when_to_use": "Extremely fast when performing quick mental math or writing
+direct equations.", "steps": [ { "step_number": 1, "explanation": "Multiply the
+Cost Price directly by the decimal scaling factor.", "latex": "\text{S.P.} =
+{{cost_price}} \times {{scaling_factor}} = {{answer}}", "computed_values": {
+"scaling_factor": "1 + profit_percent / 100", "answer": "cost_price * (1 +
+profit_percent / 100)" }, "result_expression": "cost_price * (1 + profit_percent
+/ 100)" } ], "final_answer_latex": "\boxed{ Rs. {{answer}} }",
+"final_answer_expression": "cost_price * (1 + profit_percent / 100)",
+"time_saved_seconds": 20 }, "options_generation": { "correct_answer_expression":
+"cost_price * (1 + profit_percent / 100)", "sort_order": "ascending",
+"decimal_places": 2, "distractors": [ { "distractor_expression": "cost_price *
+(1 - profit_percent / 100)", "mistake_description": "Subtracted the percentage
+instead of adding it, as if calculating a loss.", "mistake_tag": "wrong_formula"
+}, { "distractor_expression": "cost_price + profit_percent",
+"mistake_description": "Added the percentage value directly as a flat monetary
+value instead of a rate.", "mistake_tag": "setup_error" }, {
+"distractor_expression": "cost_price / (1 - profit_percent / 100)",
+"mistake_description": "Used the division-based reverse lookup formula
+incorrectly.", "mistake_tag": "inverse_error" } ] }, "tags": ["profit-and-loss",
+"selling-price", "markup"] }, { "template_id": "T004", "source_question_number":
+"Ex. 3 (ii)", "classification": { "pattern_family": "Selling Price
+Determination", "pattern_variant": "Selling Price under Loss", "wording_style":
+"Standard Word Problem", "question_direction": "forward", "actor_type": "named",
+"voice": "active", "work_framing": "full", "complicating_condition": "none",
+"difficulty": "easy", "avg_solve_time_traditional_seconds": 50,
+"avg_solve_time_shortcut_seconds": 30 }, "formula_ids": ["F002"],
+"parameter_shape": { "agent_count": 1, "given_as": "time", "has_combined_time":
+false, "has_fraction": false, "has_efficiency_ratio": false,
+"has_leave_after_days": false, "has_time_unit": false, "has_work_unit": false,
+"tokens_in_question": [ "agent_1_name", "item_name", "cost_price",
+"loss_percent" ] }, "param_ranges": { "agent_time": { "min": 10, "max": 50000,
+"step": 1 }, "combined_time": { "min": 0, "max": 0, "step": 0 }, "fraction_num":
+{ "min": 0, "max": 0 }, "fraction_den": { "min": 0, "max": 0 },
+"leave_after_days": { "min": 0, "max": 0 } }, "constraint_sets": {
+"integer_mode": { "description": "Values are aligned so that the resulting
+Selling Price is an exact integer.", "constraints": [ { "expression":
+"(cost_price * (100 - loss_percent)) % 100 === 0", "reason": "Calculated Selling
+Price has no fractional remainder under loss" } ], "answer_rounding": null },
+"decimal_mode": { "description": "Values are configured to allow
+non-integer/cents decimal outputs.", "constraints": [ { "expression":
+"(cost_price * (100 - loss_percent)) % 100 !== 0", "reason": "Selling price
+contains a cents portion under loss" } ], "answer_rounding": "2dp" },
+"fraction_mode": { "description": "Parameters selected for clean fractional
+remainders.", "constraints": [ { "expression": "(cost_price * (100 -
+loss_percent)) % 100 !== 0", "reason": "Produces fractional cents values" } ],
+"answer_rounding": null } }, "answer_expression": "cost_price * (1 -
+loss_percent / 100)", "question_template": "{{agent_1_name}} bought a
+{{item_name}} for Rs. {{cost_price}}. If she sells it at a loss of
+{{loss_percent}}%, find the selling price.", "solution_tokens": { "loss_factor":
+"100 - loss_percent", "answer": "cost_price * (1 - loss_percent / 100)" },
+"traditional_solution": { "method_name": "Standard Percentage Subtraction
+Method", "steps": [ { "step_number": 1, "explanation": "Since there is a loss of
+{{loss_percent}}%, the Selling Price must equal {{loss_factor}}% of the Cost
+Price.", "latex": "\text{S.P.} = {{loss_factor}}\% \text{ of } \text{C.P.}",
+"computed_values": { "loss_factor": "100 - loss_percent" }, "result_expression":
+"100 - loss_percent" }, { "step_number": 2, "explanation": "Calculate the final
+price by multiplying the Cost Price by the discounted percentage factor
+over 100.", "latex": "\text{S.P.} = \left(\dfrac{ {{loss_factor}} }{100}\right)
+\times {{cost_price}} = {{answer}}", "computed_values": { "loss_factor": "100 -
+loss_percent", "answer": "cost_price * (1 - loss_percent / 100)" },
+"result_expression": "cost_price * (1 - loss_percent / 100)" } ],
+"final_answer_latex": "\boxed{ Rs. {{answer}} }", "final_answer_expression":
+"cost_price * (1 - loss_percent / 100)" }, "shortcut_solution": {
+"technique_name": "Decimal Multiplier Method", "key_insight": "A loss of L%
+equates to multiplying the original cost by (1 - L/100).", "when_to_use": "Ideal
+for fast calculations when multiplying small numbers.", "steps": [ {
+"step_number": 1, "explanation": "Multiply the Cost Price directly by the
+relative decimal scale factor.", "latex": "\text{S.P.} = {{cost_price}} \times
+{{scaling_factor}} = {{answer}}", "computed_values": { "scaling_factor": "1 -
+loss_percent / 100", "answer": "cost_price * (1 - loss_percent / 100)" },
+"result_expression": "cost_price * (1 - loss_percent / 100)" } ],
+"final_answer_latex": "\boxed{ Rs. {{answer}} }", "final_answer_expression":
+"cost_price * (1 - loss_percent / 100)", "time_saved_seconds": 20 },
+"options_generation": { "correct_answer_expression": "cost_price * (1 -
+loss_percent / 100)", "sort_order": "ascending", "decimal_places": 2,
+"distractors": [ { "distractor_expression": "cost_price * (1 + loss_percent
+/ 100)", "mistake_description": "Added the percentage instead of subtracting it,
+as if calculating a gain.", "mistake_tag": "wrong_formula" }, {
+"distractor_expression": "cost_price - loss_percent", "mistake_description":
+"Subtracted the percentage value directly as a flat currency amount.",
+"mistake_tag": "setup_error" }, { "distractor_expression": "cost_price / (1 +
+loss_percent / 100)", "mistake_description": "Incorrectly applied a
+division-based markup multiplier instead of subtraction.", "mistake_tag":
+"inverse_error" } ] }, "tags": ["profit-and-loss", "selling-price", "loss"] }, {
+"template_id": "T005", "source_question_number": "Ex. 4", "classification": {
+"pattern_family": "Cost Price Determination", "pattern_variant": "Cost Price
+from Loss and Selling Price", "wording_style": "Standard Word Problem",
+"question_direction": "reverse", "actor_type": "role_based", "voice": "passive",
+"work_framing": "full", "complicating_condition": "none", "difficulty":
+"medium", "avg_solve_time_traditional_seconds": 75,
+"avg_solve_time_shortcut_seconds": 45 }, "formula_ids": ["F004"],
+"parameter_shape": { "agent_count": 0, "given_as": "time", "has_combined_time":
+false, "has_fraction": false, "has_efficiency_ratio": false,
+"has_leave_after_days": false, "has_time_unit": false, "has_work_unit": false,
+"tokens_in_question": [ "item_name", "selling_price", "loss_percent" ] },
+"param_ranges": { "agent_time": { "min": 50, "max": 100000, "step": 10 },
+"combined_time": { "min": 0, "max": 0, "step": 0 }, "fraction_num": { "min": 0,
+"max": 0 }, "fraction_den": { "min": 0, "max": 0 }, "leave_after_days": {
+"min": 0, "max": 0 } }, "constraint_sets": { "integer_mode": { "description":
+"Output cost price yields a clean, non-fractional integer.", "constraints": [ {
+"expression": "(selling_price * 100) % (100 - loss_percent) === 0", "reason":
+"Cost Price must divide evenly into a whole number" } ], "answer_rounding": null
+}, "decimal_mode": { "description": "Calculated cost price yields a fractional
+decimal value.", "constraints": [ { "expression": "(selling_price * 100) % (100
+\- loss_percent) !== 0", "reason": "Calculated Cost Price has fractional decimal
+units" } ], "answer_rounding": "2dp" }, "fraction_mode": { "description":
+"Calculated parameters yielding fractional cents.", "constraints": [ {
+"expression": "(selling_price * 100) % (100 - loss_percent) !== 0", "reason":
+"Cost Price is fractional" } ], "answer_rounding": null } },
+"answer_expression": "selling_price / (1 - loss_percent / 100)",
+"question_template": "A {{item_name}} is sold for Rs. {{selling_price}} at a
+loss of {{loss_percent}}%. What is the cost price of the {{item_name}}?",
+"solution_tokens": { "net_percentage": "100 - loss_percent", "answer":
+"selling_price * (100 / (100 - loss_percent))" }, "traditional_solution": {
+"method_name": "Percent-Value Proportion Method", "steps": [ { "step_number": 1,
+"explanation": "Since there is a loss of {{loss_percent}}%, the Selling Price of
+Rs. {{selling_price}} represents {{net_percentage}}% of the Cost Price.",
+"latex": "\text{C.P.} \times {{net_percentage}}\% = Rs. {{selling_price}}",
+"computed_values": { "net_percentage": "100 - loss_percent" },
+"result_expression": "100 - loss_percent" }, { "step_number": 2, "explanation":
+"To determine the full 100% Cost Price, divide the Selling Price by the net
+percentage fraction.", "latex": "\text{C.P.} = {{selling_price}} \times
+\dfrac{100}{ {{net_percentage}} } = {{answer}}", "computed_values": {
+"net_percentage": "100 - loss_percent", "answer": "selling_price * (100 / (100 -
+loss_percent))" }, "result_expression": "selling_price * (100 / (100 -
+loss_percent))" } ], "final_answer_latex": "\boxed{ Rs. {{answer}} }",
+"final_answer_expression": "selling_price / (1 - loss_percent / 100)" },
+"shortcut_solution": { "technique_name": "Reciprocal Factor Method",
+"key_insight": "The cost price is obtained directly by dividing the S.P. by the
+multiplier associated with the loss.", "when_to_use": "Useful for immediate
+single-step calculation setups.", "steps": [ { "step_number": 1, "explanation":
+"Set up and solve the single-line multiplier reciprocal equation.", "latex":
+"\text{C.P.} = \dfrac{ {{selling_price}} }{ {{multiplier}} } = {{answer}}",
+"computed_values": { "multiplier": "1 - loss_percent / 100", "answer":
+"selling_price * (100 / (100 - loss_percent))" }, "result_expression":
+"selling_price * (100 / (100 - loss_percent))" } ], "final_answer_latex":
+"\boxed{ Rs. {{answer}} }", "final_answer_expression": "selling_price / (1 -
+loss_percent / 100)", "time_saved_seconds": 30 }, "options_generation": {
+"correct_answer_expression": "selling_price / (1 - loss_percent / 100)",
+"sort_order": "ascending", "decimal_places": 2, "distractors": [ {
+"distractor_expression": "selling_price * (1 + loss_percent / 100)",
+"mistake_description": "Added the loss percentage directly to S.P. in a forward
+manner instead of reversing the cost fraction.", "mistake_tag": "wrong_formula"
+}, { "distractor_expression": "selling_price / (1 + loss_percent / 100)",
+"mistake_description": "Inverted the formula by treating the loss percentage as
+an additive gain percentage.", "mistake_tag": "inverse_error" }, {
+"distractor_expression": "selling_price - (selling_price * loss_percent / 100)",
+"mistake_description": "Subtracted the loss percentage directly from the selling
+price.", "mistake_tag": "setup_error" } ] }, "tags": ["profit-and-loss",
+"cost-price", "reverse-percentage"] }, { "template_id": "T006",
+"source_question_number": "Ex. 5", "classification": { "pattern_family": "Cost
+Price Determination", "pattern_variant": "Cost Price from Markup and Selling
+Price", "wording_style": "Standard Word Problem", "question_direction":
+"reverse", "actor_type": "role_based", "voice": "active", "work_framing":
+"full", "complicating_condition": "none", "difficulty": "medium",
+"avg_solve_time_traditional_seconds": 75, "avg_solve_time_shortcut_seconds": 45
+}, "formula_ids": ["F004"], "parameter_shape": { "agent_count": 0, "given_as":
+"time", "has_combined_time": false, "has_fraction": false,
+"has_efficiency_ratio": false, "has_leave_after_days": false, "has_time_unit":
+false, "has_work_unit": false, "tokens_in_question": [ "item_name",
+"markup_percent", "selling_price" ] }, "param_ranges": { "agent_time": {
+"min": 50, "max": 100000, "step": 10 }, "combined_time": { "min": 0, "max": 0,
+"step": 0 }, "fraction_num": { "min": 0, "max": 0 }, "fraction_den": { "min": 0,
+"max": 0 }, "leave_after_days": { "min": 0, "max": 0 } }, "constraint_sets": {
+"integer_mode": { "description": "Values are arranged to produce a clean Cost
+Price integer.", "constraints": [ { "expression": "(selling_price * 100) % (100
+\+ markup_percent) === 0", "reason": "Calculated Cost Price has no remainder" }
+], "answer_rounding": null }, "decimal_mode": { "description": "Values
+configured to allow fractional decimal outputs for Cost Price.", "constraints":
+[ { "expression": "(selling_price * 100) % (100 + markup_percent) !== 0",
+"reason": "Resulting Cost Price is decimal" } ], "answer_rounding": "2dp" },
+"fraction_mode": { "description": "Configured for clean division in fractional
+formatting.", "constraints": [ { "expression": "(selling_price * 100) % (100 +
+markup_percent) !== 0", "reason": "Produces fractional costs" } ],
+"answer_rounding": null } }, "answer_expression": "selling_price / (1 +
+markup_percent / 100)", "question_template": "The owner of a {{item_name}} shop
+charges his customer {{markup_percent}}% more than the cost price. If a customer
+paid Rs. {{selling_price}} for a {{item_name}}, then what was the cost price of
+the {{item_name}}?", "solution_tokens": { "markup_sum": "100 + markup_percent",
+"answer": "selling_price * (100 / (100 + markup_percent))" },
+"traditional_solution": { "method_name": "Proportional Ratio Method", "steps": [
+{ "step_number": 1, "explanation": "Since the owner charges {{markup_percent}}%
+more than the cost price, the customer's payment represents {{markup_sum}}% of
+the original cost price.", "latex": "\text{C.P.} \times {{markup_sum}}\% = Rs.
+{{selling_price}}", "computed_values": { "markup_sum": "100 + markup_percent" },
+"result_expression": "100 + markup_percent" }, { "step_number": 2,
+"explanation": "Solve for the Cost Price (C.P.) by converting the percentage
+value to its fractional equivalent and dividing.", "latex": "\text{C.P.} =
+{{selling_price}} \times \dfrac{100}{ {{markup_sum}} } = {{answer}}",
+"computed_values": { "markup_sum": "100 + markup_percent", "answer":
+"selling_price * (100 / (100 + markup_percent))" }, "result_expression":
+"selling_price * (100 / (100 + markup_percent))" } ], "final_answer_latex":
+"\boxed{ Rs. {{answer}} }", "final_answer_expression": "selling_price / (1 +
+markup_percent / 100)" }, "shortcut_solution": { "technique_name": "Direct
+Inverse Multiplier Method", "key_insight": "A value marked up by M% can be
+reverted to original cost by dividing directly by (1 + M/100).", "when_to_use":
+"Saves writing intermediate proportions when reverse-engineering costs.",
+"steps": [ { "step_number": 1, "explanation": "Divide Selling Price directly by
+the decimal markup factor.", "latex": "\text{C.P.} = \dfrac{ {{selling_price}}
+}{ {{factor}} } = {{answer}}", "computed_values": { "factor": "1 +
+markup_percent / 100", "answer": "selling_price * (100 / (100 +
+markup_percent))" }, "result_expression": "selling_price * (100 / (100 +
+markup_percent))" } ], "final_answer_latex": "\boxed{ Rs. {{answer}} }",
+"final_answer_expression": "selling_price / (1 + markup_percent / 100)",
+"time_saved_seconds": 30 }, "options_generation": { "correct_answer_expression":
+"selling_price / (1 + markup_percent / 100)", "sort_order": "ascending",
+"decimal_places": 2, "distractors": [ { "distractor_expression": "selling_price
+\* (1 - markup_percent / 100)", "mistake_description": "Incorrectly subtracted
+markup from Selling Price directly as if it were a discount.", "mistake_tag":
+"wrong_formula" }, { "distractor_expression": "selling_price - markup_percent",
+"mistake_description": "Directly subtracted the percentage value as a raw
+currency unit.", "mistake_tag": "setup_error" }, { "distractor_expression":
+"selling_price * (1 + markup_percent / 100)", "mistake_description": "Applied
+the markup multiplier on the Selling Price instead of reverse-engineering from
+Cost Price.", "mistake_tag": "inverse_error" } ] }, "tags": ["profit-and-loss",
+"cost-price", "markup-reversal"] }, { "template_id": "T007",
+"source_question_number": "Ex. 6", "classification": { "pattern_family":
+"Two-Step Price Adjustments", "pattern_variant": "Double Transaction Profit
+Correction", "wording_style": "Standard Word Problem", "question_direction":
+"conditional", "actor_type": "named", "voice": "active", "work_framing": "full",
+"complicating_condition": "none", "difficulty": "hard",
+"avg_solve_time_traditional_seconds": 120, "avg_solve_time_shortcut_seconds": 75
+}, "formula_ids": ["F003", "F004"], "parameter_shape": { "agent_count": 1,
+"given_as": "time", "has_combined_time": false, "has_fraction": false,
+"has_efficiency_ratio": false, "has_leave_after_days": false, "has_time_unit":
+false, "has_work_unit": false, "tokens_in_question": [ "agent_1_name",
+"item_name", "selling_price", "loss_percent", "target_profit_percent" ] },
+"param_ranges": { "agent_time": { "min": 100, "max": 200000, "step": 10 },
+"combined_time": { "min": 0, "max": 0, "step": 0 }, "fraction_num": { "min": 0,
+"max": 0 }, "fraction_den": { "min": 0, "max": 0 }, "leave_after_days": {
+"min": 0, "max": 0 } }, "constraint_sets": { "integer_mode": { "description":
+"Configured so that both Cost Price and the Target Selling Price are exact whole
+numbers.", "constraints": [ { "expression": "(selling_price * 100) % (100 -
+loss_percent) === 0", "reason": "Ensure intermediate Cost Price is an integer"
+}, { "expression": "((selling_price / (1 - loss_percent / 100)) * (100 +
+target_profit_percent)) % 100 === 0", "reason": "Ensure final adjusted Selling
+Price is a clean integer" } ], "answer_rounding": null }, "decimal_mode": {
+"description": "Configured to allow decimal outputs for intermediate or final
+steps.", "constraints": [ { "expression": "(selling_price * 100) % (100 -
+loss_percent) !== 0", "reason": "Intermediate steps can contain decimals" } ],
+"answer_rounding": "2dp" }, "fraction_mode": { "description": "Values set up for
+clean division in fractional ratios.", "constraints": [ { "expression":
+"(selling_price * 100) % (100 - loss_percent) !== 0", "reason": "Allows
+fractional solutions" } ], "answer_rounding": null } }, "answer_expression":
+"(selling_price / (1 - loss_percent / 100)) * (1 + target_profit_percent
+/ 100)", "question_template": "{{agent_1_name}} sold a {{item_name}} at the cost
+of Rs. {{selling_price}} at a loss of {{loss_percent}}%. At what cost will she
+have to sell it to get a profit of {{target_profit_percent}}%?",
+"solution_tokens": { "cost_price": "selling_price / (1 - loss_percent / 100)",
+"cost_factor": "100 - loss_percent", "profit_factor": "100 +
+target_profit_percent", "answer": "(selling_price / (1 - loss_percent / 100)) *
+(1 + target_profit_percent / 100)" }, "traditional_solution": { "method_name":
+"Two-Step Cost Reference Method", "steps": [ { "step_number": 1, "explanation":
+"First, find the Cost Price (C.P.) of the {{item_name}} using the loss
+percentage from the first transaction.", "latex": "\text{C.P.} =
+{{selling_price}} \times \left(\dfrac{100}{100 - {{loss_percent}}}\right) =
+{{selling_price}} \times \dfrac{100}{ {{cost_factor}} } = Rs. {{cost_price}}",
+"computed_values": { "cost_factor": "100 - loss_percent", "cost_price":
+"selling_price / (1 - loss_percent / 100)" }, "result_expression":
+"selling_price / (1 - loss_percent / 100)" }, { "step_number": 2, "explanation":
+"Next, compute the required Selling Price to achieve the target profit of
+{{target_profit_percent}}% on the C.P.", "latex": "\text{New S.P.} = \text{C.P.}
+\times \left(\dfrac{100 + {{target_profit_percent}} }{100}\right) =
+{{cost_price}} \times \dfrac{ {{profit_factor}} }{100} = Rs. {{answer}}",
+"computed_values": { "cost_price": "selling_price / (1 - loss_percent / 100)",
+"profit_factor": "100 + target_profit_percent", "answer": "(selling_price / (1 -
+loss_percent / 100)) * (1 + target_profit_percent / 100)" },
+"result_expression": "(selling_price / (1 - loss_percent / 100)) * (1 +
+target_profit_percent / 100)" } ], "final_answer_latex": "\boxed{ Rs. {{answer}}
+}", "final_answer_expression": "(selling_price / (1 - loss_percent / 100)) * (1
+\+ target_profit_percent / 100)" }, "shortcut_solution": { "technique_name":
+"Direct Ratio Scaling", "key_insight": "Combine the purchase reversal and markup
+adjustment into a single step: New SP = Old SP * (100 + Profit%) / (100 -
+Loss%).", "when_to_use": "Extremely powerful for exams to skip calculating the
+intermediate Cost Price entirely.", "steps": [ { "step_number": 1,
+"explanation": "Use the proportional ratio formula directly to find the target
+Selling Price.", "latex": "\text{New S.P.} = {{selling_price}} \times \dfrac{100
++ {{target_profit_percent}} }{100 - {{loss_percent}} } = {{selling_price}}
+\times \dfrac{ {{profit_factor}} }{ {{cost_factor}} } = Rs. {{answer}}",
+"computed_values": { "cost_factor": "100 - loss_percent", "profit_factor": "100
+\+ target_profit_percent", "answer": "(selling_price / (1 - loss_percent / 100))
+* (1 + target_profit_percent / 100)" }, "result_expression": "(selling_price /
+(1 - loss_percent / 100)) * (1 + target_profit_percent / 100)" } ],
+"final_answer_latex": "\boxed{ Rs. {{answer}} }", "final_answer_expression":
+"(selling_price / (1 - loss_percent / 100)) * (1 + target_profit_percent
+/ 100)", "time_saved_seconds": 45 }, "options_generation": {
+"correct_answer_expression": "(selling_price / (1 - loss_percent / 100)) * (1 +
+target_profit_percent / 100)", "sort_order": "ascending", "decimal_places": 2,
+"distractors": [ { "distractor_expression": "selling_price * (1 +
+(target_profit_percent - loss_percent) / 100)", "mistake_description":
+"Incorrectly combined percentages additively, applying a flat difference
+directly to Selling Price.", "mistake_tag": "wrong_formula" }, {
+"distractor_expression": "(selling_price * (1 - loss_percent / 100)) * (1 +
+target_profit_percent / 100)", "mistake_description": "Inverted the first
+multiplier, treating the initial sale as a markup instead of reverse-engineering
+C.P.", "mistake_tag": "inverse_error" }, { "distractor_expression":
+"((selling_price / (1 - loss_percent / 100)) * (1 + target_profit_percent
+/ 100)) - 100", "mistake_description": "Calculated with a final subtraction
+error on the selling price calculation.", "mistake_tag": "arithmetic_slip" } ]
+}, "tags": ["profit-and-loss", "conditional-pricing", "double-transaction"] } ]
+}
