@@ -3,6 +3,7 @@ import {
   SQLiteConnection,
   type SQLiteDBConnection,
 } from "@capacitor-community/sqlite";
+import { Capacitor } from "@capacitor/core";
 
 class SQLiteService {
   private sqlite = new SQLiteConnection(CapacitorSQLite);
@@ -11,7 +12,17 @@ class SQLiteService {
   async initialize() {
     if (this.db) return;
 
+    // Skip web for now
+    if (Capacitor.getPlatform() === "web") {
+      console.log("[SQLite] skipping web");
+      return;
+    }
+
+    console.log("[SQLite] copyFromAssets");
+
     await CapacitorSQLite.copyFromAssets({});
+
+    console.log("[SQLite] createConnection");
 
     this.db = await this.sqlite.createConnection(
       "infinite_aptitude",
@@ -21,7 +32,11 @@ class SQLiteService {
       false,
     );
 
+    console.log("[SQLite] open");
+
     await this.db.open();
+
+    console.log("[SQLite] ready");
   }
 
   getDB() {

@@ -1,6 +1,4 @@
 import { createRoot } from "react-dom/client";
-import { StrictMode } from "react";
-
 import { setupIonicReact } from "@ionic/react";
 
 import "@ionic/react/css/core.css";
@@ -10,11 +8,18 @@ import "./index.css";
 import "@/config/i18n";
 
 import App from "./app";
+import { initDatabase } from "@/db/initDatabase";
 
 setupIonicReact();
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+async function bootstrap() {
+  try {
+    await initDatabase();
+
+    createRoot(document.getElementById("root")!).render(<App />);
+  } catch (e) {
+    console.error("Failed to initialize database", e);
+  }
+}
+
+bootstrap();
