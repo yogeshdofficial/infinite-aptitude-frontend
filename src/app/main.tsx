@@ -1,15 +1,20 @@
 import { createRoot } from "react-dom/client";
-import { setupIonicReact } from "@ionic/react";
-import "./index.css";
+import { StrictMode } from "react";
 
-/* Core CSS required for Ionic components to work properly */
+import { setupIonicReact } from "@ionic/react";
+
 import "@ionic/react/css/core.css";
-// Supports weights 100-900
 import "@fontsource-variable/inter/wght.css";
 
-import "@/config/i18n.ts";
+import "./index.css";
+import "@/config/i18n";
+
 import App from "./app";
 
 setupIonicReact();
 
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
