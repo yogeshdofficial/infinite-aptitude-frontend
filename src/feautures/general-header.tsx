@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { IonHeader, IonToolbar } from "@ionic/react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
+import { LuChevronRight } from "react-icons/lu";
 import clsx from "clsx";
 
 interface GeneralHeaderProps {
@@ -14,6 +15,56 @@ const NAV_LINKS = [
   { to: "/tabs/patterns", label: "Patterns" },
   { to: "/tabs/progress", label: "Progress" },
 ];
+
+/** Derive the active top-level nav item from the current path. */
+function useActiveSection() {
+  const { pathname } = useLocation();
+  return NAV_LINKS.find(({ to }) =>
+    to !== "/tabs/browse"
+      ? pathname.startsWith(to)
+      : pathname === to,
+  )?.label ?? null;
+}
+
+/**
+ * On deep pages (e.g. chapter → learn), show a lightweight breadcrumb so
+ * users can jump back without using the hardware back button. Only rendered
+ * on desktop (hidden md:flex).
+ */
+function DesktopBreadcrumb({ title }: { title?: string }) {
+  const { pathname } = useLocation();
+  const section = useActiveSection();
+
+  // Breadcrumb is only meaningful on pages deeper than the tab root
+  const isDeep =
+    title &&
+    section &&
+    !NAV_LINKS.some((n) => n.to === pathname);
+
+  if (!isDeep) return null;
+
+  // Find the parent tab link
+  const parent = NAV_LINKS.find(({ to }) =>
+    to !== "/tabs/browse" ? pathname.startsWith(to) : false,
+  );
+
+  if (!parent) return null;
+
+  return (
+    <div className="hidden md:flex items-center gap-1 text-xs text-muted-foreground">
+      <Link
+        to={parent.to}
+        className="hover:text-foreground transition-colors truncate max-w-[120px]"
+      >
+        {parent.label}
+      </Link>
+      <LuChevronRight className="size-3 shrink-0" />
+      <span className="text-foreground font-medium truncate max-w-[180px]">
+        {title}
+      </span>
+    </div>
+  );
+}
 
 export default function GeneralHeader({ title }: Readonly<GeneralHeaderProps>) {
   const location = useLocation();
@@ -31,8 +82,8 @@ export default function GeneralHeader({ title }: Readonly<GeneralHeaderProps>) {
               Infinite Aptitude
             </Link>
 
-            {/* Nav links — desktop only */}
-            <nav className="hidden md:flex items-center gap-1">
+            {/* Center — nav links on desktop */}
+            <div className="hidden md:flex items-center gap-1">
               {NAV_LINKS.map(({ to, label }) => {
                 const active =
                   location.pathname === to ||
@@ -46,22 +97,18 @@ export default function GeneralHeader({ title }: Readonly<GeneralHeaderProps>) {
                       "rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
                       active
                         ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
                     )}
                   >
                     {label}
                   </Link>
                 );
               })}
-            </nav>
+            </div>
 
-            {/* Right side */}
-            <div className="flex items-center gap-2 shrink-0">
-              {title && (
-                <span className="hidden lg:block text-sm text-muted-foreground max-w-48 truncate">
-                  {title}
-                </span>
-              )}
+            {/* Right side — breadcrumb on deep pages, mode toggle always */}
+            <div className="flex items-center gap-3 shrink-0">
+              <DesktopBreadcrumb title={title} />
               <ModeToggle />
             </div>
           </div>

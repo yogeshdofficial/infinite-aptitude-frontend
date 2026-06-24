@@ -6,6 +6,7 @@ import {
   type Difficulty,
 } from "@/lib/schema";
 import sqliteService from "@/db/sqliteService";
+import { dbCache } from "@/lib/db-cache";
 
 /** Shape returned by the raw GROUP_CONCAT join query. */
 interface QuestionRow {
@@ -68,27 +69,29 @@ const DETAIL_SELECT = `
   FROM questions q
 `;
 
-const DETAIL_GROUP = "";
-
 export class QuestionRepository {
   // ── single question ───────────────────────────────────────────────────────
 
   async getById(id: string): Promise<QuestionDetail | null> {
-    const db = sqliteService.getDB();
-    const result = await db.query(
-      `${DETAIL_SELECT} WHERE q.id = ? ${DETAIL_GROUP}`,
-      [id],
-    );
-    if (!result.values?.length) return null;
-    return toDetail(result.values[0] as QuestionRow);
+    return dbCache.get(`questions:detail:${id}`, async () => {
+      const db = sqliteService.getDB();
+      const result = await db.query(
+        `${DETAIL_SELECT} WHERE q.id = ?`,
+        [id],
+      );
+      if (!result.values?.length) return null;
+      return toDetail(result.values[0] as QuestionRow);
+    });
   }
 
   /** Thin fetch — no hints/formulas/mistakes. For list screens. */
   async getByIdShallow(id: string): Promise<Question | null> {
-    const db = sqliteService.getDB();
-    const result = await db.query(`SELECT * FROM questions WHERE id = ?`, [id]);
-    if (!result.values?.length) return null;
-    return QuestionSchema.parse(result.values[0]);
+    return dbCache.get(`questions:shallow:${id}`, async () => {
+      const db = sqliteService.getDB();
+      const result = await db.query(`SELECT * FROM questions WHERE id = ?`, [id]);
+      if (!result.values?.length) return null;
+      return QuestionSchema.parse(result.values[0]);
+    });
   }
 
   /**
@@ -99,72 +102,80 @@ export class QuestionRepository {
   async getExtrasById(
     id: string,
   ): Promise<{ hints: string[]; formulas: string[]; mistakes: string[] }> {
-    const db = sqliteService.getDB();
-    const result = await db.query(
-      `SELECT
-         (SELECT GROUP_CONCAT(hint,    '||') FROM question_hints    WHERE question_id = ?) AS hints_raw,
-         (SELECT GROUP_CONCAT(formula, '||') FROM question_formulas WHERE question_id = ?) AS formulas_raw,
-         (SELECT GROUP_CONCAT(mistake, '||') FROM question_mistakes WHERE question_id = ?) AS mistakes_raw`,
-      [id, id, id],
-    );
-    const row = result.values?.[0] as
-      | { hints_raw: string | null; formulas_raw: string | null; mistakes_raw: string | null }
-      | undefined;
-    return {
-      hints: row?.hints_raw ? row.hints_raw.split("||") : [],
-      formulas: row?.formulas_raw ? row.formulas_raw.split("||") : [],
-      mistakes: row?.mistakes_raw ? row.mistakes_raw.split("||") : [],
-    };
+    return dbCache.get(`questions:extras:${id}`, async () => {
+      const db = sqliteService.getDB();
+      const result = await db.query(
+        `SELECT
+           (SELECT GROUP_CONCAT(hint,    '||') FROM question_hints    WHERE question_id = ?) AS hints_raw,
+           (SELECT GROUP_CONCAT(formula, '||') FROM question_formulas WHERE question_id = ?) AS formulas_raw,
+           (SELECT GROUP_CONCAT(mistake, '||') FROM question_mistakes WHERE question_id = ?) AS mistakes_raw`,
+        [id, id, id],
+      );
+      const row = result.values?.[0] as
+        | { hints_raw: string | null; formulas_raw: string | null; mistakes_raw: string | null }
+        | undefined;
+      return {
+        hints: row?.hints_raw ? row.hints_raw.split("||") : [],
+        formulas: row?.formulas_raw ? row.formulas_raw.split("||") : [],
+        mistakes: row?.mistakes_raw ? row.mistakes_raw.split("||") : [],
+      };
+    });
   }
 
   // ── by chapter ────────────────────────────────────────────────────────────
 
   async getByChapter(chapterId: string): Promise<Question[]> {
-    const db = sqliteService.getDB();
-    const result = await db.query(
-      `SELECT * FROM questions
-       WHERE chapter_id = ?
-       ORDER BY rowid`,
-      [chapterId],
-    );
-    return QuestionSchema.array().parse(result.values ?? []);
+    return dbCache.get(`questions:chapter:${chapterId}`, async () => {
+      const db = sqliteService.getDB();
+      const result = await db.query(
+        `SELECT * FROM questions
+         WHERE chapter_id = ?
+         ORDER BY rowid`,
+        [chapterId],
+      );
+      return QuestionSchema.array().parse(result.values ?? []);
+    });
   }
 
   async getDetailsByChapter(chapterId: string): Promise<QuestionDetail[]> {
-    const db = sqliteService.getDB();
-    const result = await db.query(
-      `${DETAIL_SELECT}
-       WHERE q.chapter_id = ?
-       ${DETAIL_GROUP}
-       ORDER BY q.question_number ASC`,
-      [chapterId],
-    );
-    return (result.values ?? []).map((r) => toDetail(r as QuestionRow));
+    return dbCache.get(`questions:details:chapter:${chapterId}`, async () => {
+      const db = sqliteService.getDB();
+      const result = await db.query(
+        `${DETAIL_SELECT}
+         WHERE q.chapter_id = ?
+         ORDER BY q.question_number ASC`,
+        [chapterId],
+      );
+      return (result.values ?? []).map((r) => toDetail(r as QuestionRow));
+    });
   }
 
   // ── by pattern ────────────────────────────────────────────────────────────
 
   async getByPattern(patternId: string): Promise<Question[]> {
-    const db = sqliteService.getDB();
-    const result = await db.query(
-      `SELECT * FROM questions
-       WHERE pattern_id = ?
-       ORDER BY question_number ASC`,
-      [patternId],
-    );
-    return QuestionSchema.array().parse(result.values ?? []);
+    return dbCache.get(`questions:pattern:${patternId}`, async () => {
+      const db = sqliteService.getDB();
+      const result = await db.query(
+        `SELECT * FROM questions
+         WHERE pattern_id = ?
+         ORDER BY question_number ASC`,
+        [patternId],
+      );
+      return QuestionSchema.array().parse(result.values ?? []);
+    });
   }
 
   async getDetailsByPattern(patternId: string): Promise<QuestionDetail[]> {
-    const db = sqliteService.getDB();
-    const result = await db.query(
-      `${DETAIL_SELECT}
-       WHERE q.pattern_id = ?
-       ${DETAIL_GROUP}
-       ORDER BY q.question_number ASC`,
-      [patternId],
-    );
-    return (result.values ?? []).map((r) => toDetail(r as QuestionRow));
+    return dbCache.get(`questions:details:pattern:${patternId}`, async () => {
+      const db = sqliteService.getDB();
+      const result = await db.query(
+        `${DETAIL_SELECT}
+         WHERE q.pattern_id = ?
+         ORDER BY q.question_number ASC`,
+        [patternId],
+      );
+      return (result.values ?? []).map((r) => toDetail(r as QuestionRow));
+    });
   }
 
   // ── filters ───────────────────────────────────────────────────────────────
@@ -173,32 +184,36 @@ export class QuestionRepository {
     chapterId: string,
     difficulty: Difficulty,
   ): Promise<Question[]> {
-    const db = sqliteService.getDB();
-    const result = await db.query(
-      `SELECT * FROM questions
-       WHERE chapter_id = ? AND difficulty = ?
-       ORDER BY question_number ASC`,
-      [chapterId, difficulty],
-    );
-    return QuestionSchema.array().parse(result.values ?? []);
+    return dbCache.get(`questions:difficulty:${chapterId}:${difficulty}`, async () => {
+      const db = sqliteService.getDB();
+      const result = await db.query(
+        `SELECT * FROM questions
+         WHERE chapter_id = ? AND difficulty = ?
+         ORDER BY question_number ASC`,
+        [chapterId, difficulty],
+      );
+      return QuestionSchema.array().parse(result.values ?? []);
+    });
   }
 
   async countByPattern(
     patternId: string,
   ): Promise<{ total: number; easy: number; medium: number; hard: number }> {
-    const db = sqliteService.getDB();
-    const result = await db.query(
-      `SELECT
-         COUNT(*) AS total,
-         SUM(difficulty = 'easy')   AS easy,
-         SUM(difficulty = 'medium') AS medium,
-         SUM(difficulty = 'hard')   AS hard
-       FROM questions
-       WHERE pattern_id = ?`,
-      [patternId],
-    );
-    const row = result.values?.[0] ?? { total: 0, easy: 0, medium: 0, hard: 0 };
-    return row as { total: number; easy: number; medium: number; hard: number };
+    return dbCache.get(`questions:count:pattern:${patternId}`, async () => {
+      const db = sqliteService.getDB();
+      const result = await db.query(
+        `SELECT
+           COUNT(*) AS total,
+           SUM(difficulty = 'easy')   AS easy,
+           SUM(difficulty = 'medium') AS medium,
+           SUM(difficulty = 'hard')   AS hard
+         FROM questions
+         WHERE pattern_id = ?`,
+        [patternId],
+      );
+      const row = result.values?.[0] ?? { total: 0, easy: 0, medium: 0, hard: 0 };
+      return row as { total: number; easy: number; medium: number; hard: number };
+    });
   }
 }
 

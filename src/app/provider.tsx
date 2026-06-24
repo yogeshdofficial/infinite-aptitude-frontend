@@ -7,12 +7,22 @@ interface ProviderProps {
 }
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+/**
+ * All data lives in a read-only SQLite database that never changes at runtime.
+ * Setting staleTime and gcTime to Infinity means React Query will:
+ *   - Never consider a result "stale" → no background refetches
+ *   - Never evict a cached entry → every screen transition is instant after
+ *     the first load, with zero extra DB hits
+ *
+ * The in-memory dbCache in lib/db-cache.ts provides a second caching layer
+ * below React Query for the rare case where an entry is evicted.
+ */
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000,
-      gcTime: 30 * 60 * 1000,
-      refetchOnWindowFocus: false,
+      staleTime: Infinity,          // static data — never re-fetch
+      gcTime: Infinity,             // keep in memory for the whole session
+      refetchOnWindowFocus: false,  // no point checking a local DB on focus
       retry: 1,
     },
   },
