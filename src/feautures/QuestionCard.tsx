@@ -84,7 +84,7 @@ export default function QuestionCard({
             <Button
               variant="default"
               size="sm"
-              className="h-8 w-full rounded-xl text-xs font-semibold gap-1.5"
+              className="h-8 max-sm:w-full rounded-xl text-xs font-semibold gap-1.5"
               onClick={() => setShowSolution(true)}
             >
               <LuLightbulb className="size-3.5" />
@@ -110,16 +110,28 @@ export default function QuestionCard({
               {/* Tab bar + inline X button for quick dismissal */}
               <div className="border-b border-border/60 px-3 pt-2.5 pb-0 flex items-center gap-1.5">
                 <TabsList className="flex-1 grid grid-cols-4 rounded-xl bg-background/60 h-8">
-                  <TabsTrigger value="solution" className="rounded-lg text-[11px] px-1">
+                  <TabsTrigger
+                    value="solution"
+                    className="rounded-lg text-[11px] px-1"
+                  >
                     Solution
                   </TabsTrigger>
-                  <TabsTrigger value="shortcut" className="rounded-lg text-[11px] px-1">
+                  <TabsTrigger
+                    value="shortcut"
+                    className="rounded-lg text-[11px] px-1"
+                  >
                     Shortcut
                   </TabsTrigger>
-                  <TabsTrigger value="hints" className="rounded-lg text-[11px] px-1">
+                  <TabsTrigger
+                    value="hints"
+                    className="rounded-lg text-[11px] px-1"
+                  >
                     Hints
                   </TabsTrigger>
-                  <TabsTrigger value="formulas" className="rounded-lg text-[11px] px-1">
+                  <TabsTrigger
+                    value="formulas"
+                    className="rounded-lg text-[11px] px-1"
+                  >
                     Formulas
                   </TabsTrigger>
                 </TabsList>
