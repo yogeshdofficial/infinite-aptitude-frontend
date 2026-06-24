@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { questionRepository } from "@/db/repositories/questionRepository";
 import { CopyButton } from "@/components/CopyButton";
 import { Badge } from "@/components/ui/badge";
-import { LuChevronUp } from "react-icons/lu";
+import { LuChevronUp, LuX, LuLightbulb } from "react-icons/lu";
 
 interface QuestionCardProps {
   question: Question;
@@ -58,7 +58,7 @@ export default function QuestionCard({
     <Card className="overflow-hidden border border-border/60 shadow-sm transition-shadow hover:shadow-md">
       <CardContent className="p-0">
         {/* Question */}
-        <div className="relative p-4">
+        <div className="relative p-4 pb-3">
           <div className="pr-8">
             <div className="mb-2 flex items-center gap-2">
               <Badge
@@ -78,25 +78,61 @@ export default function QuestionCard({
           />
         </div>
 
+        {/* Reveal / Hide toggle — sits right below question text */}
+        <div className="px-4 pb-3">
+          {!showSolution ? (
+            <Button
+              variant="default"
+              size="sm"
+              className="h-8 w-full rounded-xl text-xs font-semibold gap-1.5"
+              onClick={() => setShowSolution(true)}
+            >
+              <LuLightbulb className="size-3.5" />
+              Show Solution
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 w-full rounded-xl text-xs font-semibold gap-1.5 text-muted-foreground"
+              onClick={() => setShowSolution(false)}
+            >
+              <LuChevronUp className="size-3.5" />
+              Hide Solution
+            </Button>
+          )}
+        </div>
+
         {/* Inline solution panel */}
         {showSolution && (
           <div className="border-t border-border/60 bg-muted/20">
             <Tabs defaultValue="solution">
-              <div className="border-b border-border/60 px-4 pt-3 pb-0">
-                <TabsList className="grid w-full grid-cols-4 rounded-xl bg-background/60">
-                  <TabsTrigger value="solution" className="rounded-lg text-xs">
+              {/* Tab bar + inline X button for quick dismissal */}
+              <div className="border-b border-border/60 px-3 pt-2.5 pb-0 flex items-center gap-1.5">
+                <TabsList className="flex-1 grid grid-cols-4 rounded-xl bg-background/60 h-8">
+                  <TabsTrigger value="solution" className="rounded-lg text-[11px] px-1">
                     Solution
                   </TabsTrigger>
-                  <TabsTrigger value="shortcut" className="rounded-lg text-xs">
+                  <TabsTrigger value="shortcut" className="rounded-lg text-[11px] px-1">
                     Shortcut
                   </TabsTrigger>
-                  <TabsTrigger value="hints" className="rounded-lg text-xs">
+                  <TabsTrigger value="hints" className="rounded-lg text-[11px] px-1">
                     Hints
                   </TabsTrigger>
-                  <TabsTrigger value="formulas" className="rounded-lg text-xs">
+                  <TabsTrigger value="formulas" className="rounded-lg text-[11px] px-1">
                     Formulas
                   </TabsTrigger>
                 </TabsList>
+                {/* Quick-dismiss X — always visible, easy to reach */}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-8 shrink-0 rounded-lg text-muted-foreground hover:text-foreground"
+                  onClick={() => setShowSolution(false)}
+                  title="Hide solution"
+                >
+                  <LuX className="size-3.5" />
+                </Button>
               </div>
 
               <div className="px-4 py-4">
@@ -169,25 +205,6 @@ export default function QuestionCard({
             </Tabs>
           </div>
         )}
-
-        {/* Footer */}
-        <div className="flex items-center justify-end border-t border-border/60 bg-muted/30 px-4 py-2">
-          <Button
-            variant={showSolution ? "ghost" : "default"}
-            size="sm"
-            className="h-7 rounded-full px-4 text-xs font-semibold gap-1.5"
-            onClick={() => setShowSolution((v) => !v)}
-          >
-            {showSolution ? (
-              <>
-                <LuChevronUp className="size-3" />
-                Hide
-              </>
-            ) : (
-              "Solution"
-            )}
-          </Button>
-        </div>
       </CardContent>
     </Card>
   );

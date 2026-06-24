@@ -39,7 +39,7 @@ export default function Routes() {
         <BrowsePage />
       </Route>
 
-      <Redirect exact from="/" to="/tabs/practice" />
+      <Redirect exact from="/" to="/tabs/browse" />
     </IonRouterOutlet>
   );
 }

@@ -130,6 +130,19 @@
   }
 }
 
+/* Mobile bottom nav safe area */
+.mobile-bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Add bottom padding to ion-content scroll on mobile so content isn't hidden
+   behind the fixed bottom nav bar (56px bar + optional safe area) */
+@media (max-width: 767px) {
+  ion-content::part(scroll) {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
 @layer components {
   .markdown {
     @apply text-sm leading-relaxed text-foreground;
