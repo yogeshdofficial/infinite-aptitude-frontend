@@ -1,18 +1,4 @@
-/**
- * ResourcePage
- *
- * A full-screen page for displaying a single markdown resource
- * (overview, cheatsheet, or pattern revision note).
- *
- * Route params come from the URL:
- *   /tabs/practice/:chapterId/resource/:resourceType
- *   /tabs/practice/:chapterId/pattern/:patternId/doc
- *
- * The parent (ChapterPage) passes the markdown content via history state
- * so we never need an extra network fetch here.
- */
-
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { IonContent, IonPage } from "@ionic/react";
 import { Button } from "@/components/ui/button";
 import { LuArrowLeft } from "react-icons/lu";
@@ -34,8 +20,7 @@ export default function ResourcePage() {
 
   return (
     <IonPage>
-      {/* ── Header ── */}
-      <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border/60 bg-background px-3">
+      <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border/60 bg-background px-6">
         <Button
           variant="ghost"
           size="icon"
@@ -53,17 +38,18 @@ export default function ResourcePage() {
         {markdown && <CopyButton text={markdown} />}
       </header>
 
-      {/* ── Content ── */}
       <IonContent fullscreen>
-        <article className="prose-sm px-4 py-5">
+        <div className="mx-auto max-w-3xl px-6 py-8">
           {markdown ? (
-            <MarkdownViewer markdown={markdown} />
+            <article className="prose prose-sm max-w-none">
+              <MarkdownViewer markdown={markdown} />
+            </article>
           ) : (
             <p className="text-center text-sm text-muted-foreground">
               No content available.
             </p>
           )}
-        </article>
+        </div>
       </IonContent>
     </IonPage>
   );

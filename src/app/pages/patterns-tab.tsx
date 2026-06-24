@@ -10,8 +10,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { Chapter } from "@/lib/schema";
 import { LuChevronDown, LuChevronRight } from "react-icons/lu";
 
-// ── Per-chapter pattern list ──────────────────────────────────────────────────
-
 function ChapterSection({ chapter }: Readonly<{ chapter: Chapter }>) {
   const history = useHistory();
   const [expanded, setExpanded] = useState(false);
@@ -19,7 +17,6 @@ function ChapterSection({ chapter }: Readonly<{ chapter: Chapter }>) {
   const { data: patterns = [], isLoading } = useQuery({
     queryKey: ["patternCounts", chapter.id],
     queryFn: () => patternRepository.getCountsByChapter(chapter.id),
-    // Only fetch when the section is first opened
     enabled: expanded,
     staleTime: Infinity,
   });
@@ -28,7 +25,6 @@ function ChapterSection({ chapter }: Readonly<{ chapter: Chapter }>) {
 
   return (
     <div className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm">
-      {/* Chapter header – acts as the toggle */}
       <button
         className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-muted/40"
         onClick={() => setExpanded((v) => !v)}
@@ -42,7 +38,7 @@ function ChapterSection({ chapter }: Readonly<{ chapter: Chapter }>) {
             <span className="text-xs text-muted-foreground">
               {totalQuestions > 0
                 ? `${totalQuestions} questions`
-                : "Tap to load"}
+                : "Click to load"}
             </span>
           )}
         </span>
@@ -53,7 +49,6 @@ function ChapterSection({ chapter }: Readonly<{ chapter: Chapter }>) {
         )}
       </button>
 
-      {/* Pattern list */}
       {expanded && (
         <div className="border-t border-border/60">
           {isLoading ? (
@@ -88,8 +83,6 @@ function ChapterSection({ chapter }: Readonly<{ chapter: Chapter }>) {
   );
 }
 
-// ── Page ─────────────────────────────────────────────────────────────────────
-
 export default function PatternsTab() {
   const {
     data: chapters = [],
@@ -104,28 +97,32 @@ export default function PatternsTab() {
     <IonPage>
       <GeneralHeader title="Patterns" />
       <IonContent fullscreen>
-        <main className="flex flex-col gap-3 p-4 pb-8">
-          {isLoading &&
-            Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="h-14 w-full rounded-xl" />
+        <div className="mx-auto max-w-3xl px-6 py-8">
+          <h2 className="mb-6 text-2xl font-bold tracking-tight">Patterns</h2>
+
+          <div className="flex flex-col gap-3 pb-8">
+            {isLoading &&
+              Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton key={i} className="h-14 w-full rounded-xl" />
+              ))}
+
+            {error && (
+              <p className="rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
+                Failed to load patterns. Please try again.
+              </p>
+            )}
+
+            {!isLoading && !error && chapters.length === 0 && (
+              <p className="text-center text-sm text-muted-foreground">
+                No chapters found.
+              </p>
+            )}
+
+            {chapters.map((chapter) => (
+              <ChapterSection key={chapter.id} chapter={chapter} />
             ))}
-
-          {error && (
-            <p className="rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
-              Failed to load patterns. Please try again.
-            </p>
-          )}
-
-          {!isLoading && !error && chapters.length === 0 && (
-            <p className="text-center text-sm text-muted-foreground">
-              No chapters found.
-            </p>
-          )}
-
-          {chapters.map((chapter) => (
-            <ChapterSection key={chapter.id} chapter={chapter} />
-          ))}
-        </main>
+          </div>
+        </div>
       </IonContent>
     </IonPage>
   );

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import type { Chapter } from "@/lib/schema";
 import { LuChevronRight } from "react-icons/lu";
 
@@ -9,14 +9,12 @@ interface ChapterCardProps {
 
 export default function ChapterCard({ chapter }: Readonly<ChapterCardProps>) {
   return (
-    <Link to={`/tabs/practice/${chapter.id}`}>
-      <Card className="w-full transition-colors hover:bg-muted/40">
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between text-base">
-            <span>{chapter.display_name}</span>
-            <LuChevronRight className="size-4 text-muted-foreground" />
-          </CardTitle>
-        </CardHeader>
+    <Link to={`/tabs/practice/${chapter.id}`} className="group block">
+      <Card className="w-full transition-all hover:bg-muted/40 hover:border-primary/30 hover:shadow-md">
+        <CardContent className="flex items-center justify-between p-4">
+          <span className="text-sm font-medium">{chapter.display_name}</span>
+          <LuChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+        </CardContent>
       </Card>
     </Link>
   );

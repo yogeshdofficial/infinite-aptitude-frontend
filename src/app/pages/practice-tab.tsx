@@ -19,26 +19,32 @@ export default function PracticeTab() {
     <IonPage>
       <GeneralHeader title="Practice" />
       <IonContent fullscreen>
-        <main className="flex flex-col gap-3 p-4">
-          {isLoading &&
-            Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="h-16 w-full" />
+        <div className="mx-auto max-w-3xl px-6 py-8">
+          <h2 className="mb-6 text-2xl font-bold tracking-tight">Chapters</h2>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {isLoading &&
+              Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className="h-16 w-full rounded-xl" />
+              ))}
+
+            {error && (
+              <p className="col-span-2 text-sm text-destructive">
+                Failed to load chapters. Please try again.
+              </p>
+            )}
+
+            {!isLoading && !error && chapters.length === 0 && (
+              <p className="col-span-2 text-sm text-muted-foreground">
+                No chapters found.
+              </p>
+            )}
+
+            {chapters.map((chap) => (
+              <ChapterCard key={chap.id} chapter={chap} />
             ))}
-
-          {error && (
-            <p className="text-sm text-destructive">
-              Failed to load chapters. Please try again.
-            </p>
-          )}
-
-          {!isLoading && !error && chapters.length === 0 && (
-            <p className="text-sm text-muted-foreground">No chapters found.</p>
-          )}
-
-          {chapters.map((chap) => (
-            <ChapterCard key={chap.id} chapter={chap} />
-          ))}
-        </main>
+          </div>
+        </div>
       </IonContent>
     </IonPage>
   );

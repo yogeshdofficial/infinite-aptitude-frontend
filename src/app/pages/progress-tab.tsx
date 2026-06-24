@@ -47,26 +47,31 @@ export default function ProgressTab() {
     <IonPage>
       <GeneralHeader title="Progress" />
       <IonContent fullscreen>
-        <main className="flex flex-col gap-3 p-4">
-          <p className="text-sm text-muted-foreground">
-            Question and pattern coverage by chapter.
-          </p>
-
-          {isLoading &&
-            Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="h-14 w-full" />
-            ))}
-
-          {error && (
-            <p className="text-sm text-destructive">
-              Failed to load progress. Please try again.
+        <div className="mx-auto max-w-3xl px-6 py-8">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold tracking-tight">Progress</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Question and pattern coverage by chapter.
             </p>
-          )}
+          </div>
 
-          {chapters.map((chapter) => (
-            <ChapterProgressRow key={chapter.id} chapter={chapter} />
-          ))}
-        </main>
+          <div className="flex flex-col gap-3">
+            {isLoading &&
+              Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton key={i} className="h-14 w-full" />
+              ))}
+
+            {error && (
+              <p className="text-sm text-destructive">
+                Failed to load progress. Please try again.
+              </p>
+            )}
+
+            {chapters.map((chapter) => (
+              <ChapterProgressRow key={chapter.id} chapter={chapter} />
+            ))}
+          </div>
+        </div>
       </IonContent>
     </IonPage>
   );

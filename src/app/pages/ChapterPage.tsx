@@ -19,8 +19,6 @@ import {
   LuPenLine,
 } from "react-icons/lu";
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
-
 function ResourceRow({
   icon,
   label,
@@ -87,8 +85,6 @@ function PatternRow({
   );
 }
 
-// ── Main page ─────────────────────────────────────────────────────────────────
-
 export default function ChapterPage() {
   const { chapterId } = useParams<{ chapterId: string }>();
   const history = useHistory();
@@ -124,12 +120,10 @@ export default function ChapterPage() {
   const overview = resources?.find((r) => r.resource_type === "overview");
   const cheatsheet = resources?.find((r) => r.resource_type === "cheatsheet");
 
-  /** Navigate to the full-page resource viewer */
   function openResource(title: string, markdown: string) {
     history.push(`/tabs/practice/${chapterId}/resource`, { title, markdown });
   }
 
-  /** Navigate to the pattern doc viewer */
   function openPatternDoc(patternName: string, markdown: string) {
     history.push(`/tabs/practice/${chapterId}/resource`, {
       title: patternName,
@@ -142,106 +136,110 @@ export default function ChapterPage() {
       <GeneralHeader title={chapter?.display_name ?? ""} />
 
       <IonContent fullscreen>
-        <main className="flex flex-col gap-5 p-4 pb-8">
-          {/* ── Primary actions ── */}
-          <div className="flex gap-2">
-            <Button
-              className="flex-1 rounded-xl font-semibold"
-              onClick={() => history.push(`/tabs/practice/${chapterId}/learn`)}
-            >
-              <LuGraduationCap className="mr-1.5 size-4" />
-              Learn
-            </Button>
-            <Button
-              variant="outline"
-              className="flex-1 rounded-xl font-semibold"
-            >
-              Quiz
-            </Button>
+        <div className="mx-auto max-w-3xl px-6 py-8">
+          {/* Page title + actions */}
+          <div className="mb-8 flex items-start justify-between gap-4">
+            <h2 className="text-2xl font-bold tracking-tight">
+              {chapter?.display_name ?? "Chapter"}
+            </h2>
+            <div className="flex gap-2 shrink-0">
+              <Button
+                className="rounded-xl font-semibold"
+                onClick={() => history.push(`/tabs/practice/${chapterId}/learn`)}
+              >
+                <LuGraduationCap className="mr-1.5 size-4" />
+                Learn
+              </Button>
+              <Button variant="outline" className="rounded-xl font-semibold">
+                Quiz
+              </Button>
+            </div>
           </div>
 
-          {/* ── Resources section ── */}
-          <section>
-            <h2 className="mb-2.5 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              Resources
-            </h2>
-            <div className="flex flex-col gap-2">
-              {resourcesLoading ? (
-                <>
-                  <Skeleton className="h-14 w-full rounded-xl" />
-                  <Skeleton className="h-14 w-full rounded-xl" />
-                </>
-              ) : (
-                <>
-                  <ResourceRow
-                    icon={<LuBookOpen className="size-4" />}
-                    label="Chapter Overview"
-                    sublabel={
-                      overview ? "Concepts & key ideas" : "Not available yet"
-                    }
-                    available={!!overview}
-                    onClick={() =>
-                      openResource(
-                        `${chapter?.display_name} — Overview`,
-                        overview?.markdown ?? "",
-                      )
-                    }
-                  />
-                  <ResourceRow
-                    icon={<LuFileText className="size-4" />}
-                    label="Cheatsheet"
-                    sublabel={
-                      cheatsheet ? "Quick reference" : "Not available yet"
-                    }
-                    available={!!cheatsheet}
-                    onClick={() =>
-                      openResource(
-                        `${chapter?.display_name} — Cheatsheet`,
-                        cheatsheet?.markdown ?? "",
-                      )
-                    }
-                  />
-                </>
-              )}
-            </div>
-          </section>
-
-          {/* ── Patterns section ── */}
-          <section>
-            <h2 className="mb-2.5 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              Patterns
-            </h2>
-
-            {patternsLoading ? (
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+            {/* Resources */}
+            <section>
+              <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                Resources
+              </h3>
               <div className="flex flex-col gap-2">
-                <Skeleton className="h-14 w-full rounded-xl" />
-                <Skeleton className="h-14 w-full rounded-xl" />
-                <Skeleton className="h-14 w-full rounded-xl" />
-              </div>
-            ) : patternCounts.length === 0 ? (
-              <p className="rounded-xl border border-border/60 p-4 text-center text-sm text-muted-foreground">
-                No patterns found for this chapter.
-              </p>
-            ) : (
-              <div className="flex flex-col gap-2">
-                {patternCounts.map((pattern) => {
-                  const doc = docsByPattern.get(pattern.pattern_id);
-                  return (
-                    <PatternRow
-                      key={pattern.pattern_id}
-                      name={pattern.name}
-                      count={pattern.count}
-                      hasDoc={!!doc}
-                      onClick={() => {
-                        if (doc) openPatternDoc(pattern.name, doc);
-                      }}
+                {resourcesLoading ? (
+                  <>
+                    <Skeleton className="h-14 w-full rounded-xl" />
+                    <Skeleton className="h-14 w-full rounded-xl" />
+                  </>
+                ) : (
+                  <>
+                    <ResourceRow
+                      icon={<LuBookOpen className="size-4" />}
+                      label="Chapter Overview"
+                      sublabel={
+                        overview ? "Concepts & key ideas" : "Not available yet"
+                      }
+                      available={!!overview}
+                      onClick={() =>
+                        openResource(
+                          `${chapter?.display_name} — Overview`,
+                          overview?.markdown ?? "",
+                        )
+                      }
                     />
-                  );
-                })}
+                    <ResourceRow
+                      icon={<LuFileText className="size-4" />}
+                      label="Cheatsheet"
+                      sublabel={
+                        cheatsheet ? "Quick reference" : "Not available yet"
+                      }
+                      available={!!cheatsheet}
+                      onClick={() =>
+                        openResource(
+                          `${chapter?.display_name} — Cheatsheet`,
+                          cheatsheet?.markdown ?? "",
+                        )
+                      }
+                    />
+                  </>
+                )}
               </div>
-            )}
-          </section>
-        </main>
+            </section>
+
+            {/* Patterns */}
+            <section>
+              <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                Patterns
+              </h3>
+
+              {patternsLoading ? (
+                <div className="flex flex-col gap-2">
+                  <Skeleton className="h-14 w-full rounded-xl" />
+                  <Skeleton className="h-14 w-full rounded-xl" />
+                  <Skeleton className="h-14 w-full rounded-xl" />
+                </div>
+              ) : patternCounts.length === 0 ? (
+                <p className="rounded-xl border border-border/60 p-4 text-center text-sm text-muted-foreground">
+                  No patterns found for this chapter.
+                </p>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  {patternCounts.map((pattern) => {
+                    const doc = docsByPattern.get(pattern.pattern_id);
+                    return (
+                      <PatternRow
+                        key={pattern.pattern_id}
+                        name={pattern.name}
+                        count={pattern.count}
+                        hasDoc={!!doc}
+                        onClick={() => {
+                          if (doc) openPatternDoc(pattern.name, doc);
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+            </section>
+          </div>
+        </div>
       </IonContent>
     </IonPage>
   );
