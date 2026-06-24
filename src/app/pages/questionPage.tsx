@@ -108,7 +108,7 @@ function SolutionPanel({
         </TabsList>
       </div>
 
-      <div className="px-5 py-4">
+      <div className="px-5 py-5">
         <TabsContent value="solution" className="mt-0">
           <div className="mb-3 flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
@@ -311,21 +311,22 @@ function StudyCard({
 
         {/* Solution panel ─ mobile: flex-1 scroll | desktop: right column */}
         <div className="flex-1 overflow-y-auto">
-          <div className="px-5 md:px-7 py-5 pb-28 lg:pb-10">
+          {/* max-w keeps lines readable on ultra-wide monitors; mx-auto centres it */}
+          <div className="mx-auto w-full max-w-[780px] px-5 md:px-7 py-5 pb-28 lg:pb-10">
             {!showSolution ? (
               /* Empty state — desktop only (mobile shows the full page CTA above) */
-              <div className="hidden lg:flex flex-col items-center justify-center h-full min-h-[200px] gap-4 text-center">
+              <div className="hidden lg:flex flex-col items-center justify-center h-full min-h-[220px] gap-4 text-center">
                 <div className="size-14 rounded-2xl bg-muted flex items-center justify-center text-muted-foreground">
                   <LuLightbulb className="size-6" />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-foreground">Ready when you are</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
+                  <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
                     Press{" "}
                     <kbd className="rounded border border-border/80 px-1.5 py-px bg-muted text-[10px]">
                       Space
                     </kbd>{" "}
-                    or click "Show Solution" to reveal
+                    or click <span className="font-medium text-foreground">Show Solution</span> to reveal
                   </p>
                 </div>
               </div>

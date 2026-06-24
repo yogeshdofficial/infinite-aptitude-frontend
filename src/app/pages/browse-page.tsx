@@ -121,9 +121,9 @@ function PatternQuestions({
       </div>
 
       {/* Question list */}
-      <div className="flex-1 overflow-y-auto px-4 md:px-5 py-4">
+      <div className="flex-1 overflow-y-auto py-4">
         {isLoading ? (
-          <div className="flex flex-col gap-3">
+          <div className="mx-auto max-w-3xl px-4 md:px-5 flex flex-col gap-3">
             {Array.from({ length: 4 }).map((_, i) => (
               <Skeleton key={i} className="h-24 w-full rounded-xl" />
             ))}
@@ -135,7 +135,7 @@ function PatternQuestions({
             </p>
           </div>
         ) : (
-          <div className="flex flex-col gap-3 pb-8">
+          <div className="mx-auto max-w-3xl px-4 md:px-5 flex flex-col gap-3 pb-8">
             <p className="text-xs text-muted-foreground">
               {questions.length} question{questions.length === 1 ? "" : "s"}
             </p>
@@ -235,9 +235,9 @@ function ChapterPatterns({
       )}
 
       {/* Pattern list */}
-      <div className="flex-1 overflow-y-auto px-4 md:px-5 py-4">
+      <div className="flex-1 overflow-y-auto py-4">
         {isLoading ? (
-          <div className="flex flex-col gap-2">
+          <div className="mx-auto max-w-2xl px-4 md:px-5 flex flex-col gap-2">
             {Array.from({ length: 6 }).map((_, i) => (
               <Skeleton key={i} className="h-12 w-full rounded-xl" />
             ))}
@@ -249,7 +249,7 @@ function ChapterPatterns({
             </p>
           </div>
         ) : (
-          <div className="flex flex-col gap-1.5 pb-8">
+          <div className="mx-auto max-w-2xl px-4 md:px-5 flex flex-col gap-1.5 pb-8">
             {!search && (
               <p className="mb-2 text-xs text-muted-foreground">
                 {patterns.length} pattern{patterns.length === 1 ? "" : "s"} ·

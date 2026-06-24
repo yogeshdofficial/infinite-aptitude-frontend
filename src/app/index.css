@@ -144,75 +144,119 @@
 }
 
 @layer components {
+  /* ── Base ─────────────────────────────────────────────────────── */
   .markdown {
-    @apply text-sm leading-relaxed text-foreground;
+    @apply text-sm text-foreground;
+    line-height: 1.8;
   }
-  .markdown > :first-child {
-    margin-top: 0;
-  }
-  .markdown > :last-child {
-    margin-bottom: 0;
-  }
-  .markdown p {
-    @apply my-2;
-  }
+  .markdown > :first-child { margin-top: 0; }
+  .markdown > :last-child  { margin-bottom: 0; }
+
+  /* ── Paragraphs ────────────────────────────────────────────────── */
+  .markdown p { @apply my-3; }
+
+  /* ── Headings ──────────────────────────────────────────────────── */
   .markdown h1,
   .markdown h2,
   .markdown h3,
   .markdown h4 {
-    @apply mt-4 mb-2 font-heading font-semibold text-foreground;
+    @apply mt-6 mb-2.5 font-heading font-semibold tracking-tight text-foreground;
+    line-height: 1.35;
   }
-  .markdown h1 {
-    @apply text-lg;
-  }
-  .markdown h2 {
-    @apply text-base;
-  }
-  .markdown h3,
-  .markdown h4 {
-    @apply text-sm;
-  }
-  .markdown ul {
-    @apply my-2 list-disc space-y-1 pl-5;
-  }
-  .markdown ol {
-    @apply my-2 list-decimal space-y-1 pl-5;
-  }
-  .markdown li {
-    @apply leading-relaxed;
-  }
-  .markdown a {
-    @apply text-primary underline underline-offset-2;
-  }
-  .markdown strong {
-    @apply font-semibold text-foreground;
-  }
+  .markdown h1 { @apply text-lg; }
+  .markdown h2 { @apply text-[0.9375rem]; }
+  .markdown h3 { @apply text-sm; }
+  .markdown h4 { @apply text-sm font-medium text-muted-foreground; }
+
+  /* ── Lists ─────────────────────────────────────────────────────── */
+  .markdown ul { @apply my-3 list-disc space-y-1.5 pl-5; }
+  .markdown ol { @apply my-3 list-decimal space-y-1.5 pl-5; }
+  .markdown li { line-height: 1.75; }
+  .markdown li > p { @apply my-1; }
+
+  /* ── Inline elements ───────────────────────────────────────────── */
+  .markdown a       { @apply text-primary underline underline-offset-2 transition-opacity hover:opacity-75; }
+  .markdown strong  { @apply font-semibold text-foreground; }
+  .markdown em      { @apply italic; }
+  .markdown del     { @apply line-through opacity-60; }
+
+  /* ── Inline code ───────────────────────────────────────────────── */
   .markdown code {
-    @apply rounded-sm bg-muted px-1 py-0.5 font-mono text-[0.85em];
+    @apply rounded-md px-1.5 py-0.5 font-mono text-[0.82em];
+    background: color-mix(in oklch, var(--color-primary) 10%, transparent);
+    color: var(--color-primary);
   }
+
+  /* ── Code blocks ───────────────────────────────────────────────── */
   .markdown pre {
-    @apply my-2 overflow-x-auto rounded-md bg-muted p-3;
+    @apply my-4 overflow-x-auto rounded-xl border border-border/60 bg-muted/50 p-4 font-mono text-[0.8125rem] leading-relaxed;
   }
   .markdown pre code {
-    @apply bg-transparent p-0;
+    background: transparent;
+    color: inherit;
+    padding: 0;
   }
+
+  /* ── Blockquote — used for solution steps & key results ────────── */
+  /* Signature element: textbook margin-annotation feel */
   .markdown blockquote {
-    @apply my-2 border-l-2 border-border pl-3 text-muted-foreground;
+    @apply my-4 rounded-r-xl border-l-[3px] border-primary py-3 pl-4 pr-3.5;
+    background: color-mix(in oklch, var(--color-primary) 6%, transparent);
+    color: inherit;
   }
-  .markdown hr {
-    @apply my-4 border-border;
-  }
+  .markdown blockquote p { @apply my-1.5; }
+  .markdown blockquote > :first-child { margin-top: 0; }
+  .markdown blockquote > :last-child  { margin-bottom: 0; }
+
+  /* ── Dividers ──────────────────────────────────────────────────── */
+  .markdown hr { @apply my-5 border-border/50; }
+
+  /* ── Tables — horizontally scrollable ─────────────────────────── */
   .markdown table {
-    @apply my-2 w-full border-collapse text-xs;
+    @apply my-4 w-full border-collapse text-[0.8125rem];
+    display: block;
+    overflow-x: auto;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
   }
-  .markdown th,
-  .markdown td {
-    @apply border border-border px-2 py-1 text-left;
-  }
+  .markdown thead { @apply bg-muted/60; }
   .markdown th {
-    @apply bg-muted font-medium;
+    @apply border-b border-border px-3 py-2 text-left text-[0.75rem] font-semibold uppercase tracking-wide text-muted-foreground;
+    white-space: nowrap;
   }
-  .markdown img {
-    @apply my-2 max-w-full rounded-md;
+  .markdown td {
+    @apply border-b border-border/40 px-3 py-2 align-top;
   }
+  .markdown tbody tr:last-child td { border-bottom: none; }
+  .markdown tbody tr:hover td {
+    background: color-mix(in oklch, var(--color-primary) 4%, transparent);
+  }
+
+  /* ── Images ────────────────────────────────────────────────────── */
+  .markdown img { @apply my-3 max-w-full rounded-xl; }
+}
+
+/* ── KaTeX math — critical overflow fix ──────────────────────────────────── */
+/* Display math (block equations) must scroll, never break the layout */
+.markdown .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 0.5rem 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.markdown .katex-display::-webkit-scrollbar {
+  height: 4px;
+}
+.markdown .katex-display::-webkit-scrollbar-track {
+  background: transparent;
+}
+.markdown .katex-display::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--color-primary) 30%, transparent);
+  border-radius: 2px;
+}
+/* Inline math stays at current font size, no size inflation */
+.markdown .katex {
+  font-size: 1em;
 }

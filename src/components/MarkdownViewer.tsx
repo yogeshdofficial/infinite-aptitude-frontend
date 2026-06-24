@@ -9,7 +9,7 @@ interface Props {
 
 export function MarkdownViewer({ markdown }: Readonly<Props>) {
   return (
-    <div className="markdown">
+    <div className="markdown ">
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex]}

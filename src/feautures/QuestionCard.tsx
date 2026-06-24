@@ -29,14 +29,14 @@ function MarkdownList({
   return (
     <ul className="flex flex-col divide-y divide-border">
       {items.map((item, i) => (
-        <li key={i} className="relative py-3">
-          <div className="flex items-start gap-2 pr-8">
+        <li key={i} className="relative py-3.5">
+          <div className="flex items-start gap-3 pr-8">
             <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary">
               {i + 1}
             </span>
             <MarkdownViewer markdown={item} />
           </div>
-          <CopyButton text={item} className="absolute right-0 top-3" />
+          <CopyButton text={item} className="absolute right-0 top-3.5" />
         </li>
       ))}
     </ul>
@@ -60,7 +60,7 @@ export default function QuestionCard({
         {/* Question */}
         <div className="relative p-4 pb-3">
           <div className="pr-8">
-            <div className="mb-2 flex items-center gap-2">
+            <div className="mb-2.5 flex items-center gap-2">
               <Badge
                 variant="secondary"
                 className="rounded-full px-2 py-0 text-[10px] font-semibold"
@@ -78,7 +78,7 @@ export default function QuestionCard({
           />
         </div>
 
-        {/* Reveal / Hide toggle — sits right below question text */}
+        {/* Reveal / Hide toggle */}
         <div className="px-4 pb-3">
           {!showSolution ? (
             <Button
@@ -107,7 +107,7 @@ export default function QuestionCard({
         {showSolution && (
           <div className="border-t border-border/60 bg-muted/20">
             <Tabs defaultValue="solution">
-              {/* Tab bar + inline X button for quick dismissal */}
+              {/* Tab bar + quick-dismiss X */}
               <div className="border-b border-border/60 px-3 pt-2.5 pb-0 flex items-center gap-1.5">
                 <TabsList className="flex-1 grid grid-cols-4 rounded-xl bg-background/60 h-8">
                   <TabsTrigger
@@ -135,7 +135,6 @@ export default function QuestionCard({
                     Formulas
                   </TabsTrigger>
                 </TabsList>
-                {/* Quick-dismiss X — always visible, easy to reach */}
                 <Button
                   variant="ghost"
                   size="icon"
@@ -147,7 +146,8 @@ export default function QuestionCard({
                 </Button>
               </div>
 
-              <div className="px-4 py-4">
+              {/* Content — capped at readable width, never stretches beyond ~768px */}
+              <div className="px-4 py-4 max-w-3xl">
                 <TabsContent value="solution" className="mt-0">
                   <div className="mb-3 flex items-center justify-between">
                     <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
