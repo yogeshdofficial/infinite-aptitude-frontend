@@ -43,7 +43,9 @@ function MarkdownList({
   );
 }
 
-export default function QuestionCard({ question }: Readonly<QuestionCardProps>) {
+export default function QuestionCard({
+  question,
+}: Readonly<QuestionCardProps>) {
   const [showSolution, setShowSolution] = useState(false);
 
   const { data: extras, isLoading: extrasLoading } = useQuery({
@@ -108,7 +110,9 @@ export default function QuestionCard({ question }: Readonly<QuestionCardProps>) 
                     )}
                   </div>
                   <MarkdownViewer
-                    markdown={question.traditional_solution ?? "Solution not available."}
+                    markdown={
+                      question.traditional_solution ?? "Solution not available."
+                    }
                   />
                 </TabsContent>
 
@@ -122,7 +126,9 @@ export default function QuestionCard({ question }: Readonly<QuestionCardProps>) 
                     )}
                   </div>
                   <MarkdownViewer
-                    markdown={question.shortcut_solution ?? "No shortcut available."}
+                    markdown={
+                      question.shortcut_solution ?? "No shortcut available."
+                    }
                   />
                 </TabsContent>
 
@@ -136,7 +142,10 @@ export default function QuestionCard({ question }: Readonly<QuestionCardProps>) 
                       <Skeleton className="h-5 w-5/6" />
                     </div>
                   ) : (
-                    <MarkdownList items={extras?.hints} emptyMessage="No hints available." />
+                    <MarkdownList
+                      items={extras?.hints}
+                      emptyMessage="No hints available."
+                    />
                   )}
                 </TabsContent>
 
@@ -150,7 +159,10 @@ export default function QuestionCard({ question }: Readonly<QuestionCardProps>) 
                       <Skeleton className="h-5 w-5/6" />
                     </div>
                   ) : (
-                    <MarkdownList items={extras?.formulas} emptyMessage="No formulas listed." />
+                    <MarkdownList
+                      items={extras?.formulas}
+                      emptyMessage="No formulas listed."
+                    />
                   )}
                 </TabsContent>
               </div>
