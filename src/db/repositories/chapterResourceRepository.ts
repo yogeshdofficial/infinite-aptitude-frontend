@@ -2,8 +2,8 @@ import {
   ChapterResourceSchema,
   type ChapterResource,
   type ResourceType,
-} from "@/db/schema";
-import sqliteService from "@/services/sqliteService";
+} from "@/lib/schema";
+import sqliteService from "@/db/sqliteService";
 
 export class ChapterResourceRepository {
   /** Cheatsheet markdown for a chapter. */

@@ -1,8 +1,8 @@
 import {
   PatternDocSchema,
   type PatternDoc,
-} from "@/db/schema";
-import sqliteService from "@/services/sqliteService";
+} from "@/lib/schema";
+import sqliteService from "@/db/sqliteService";
 
 export class PatternDocRepository {
   /** Revision note for a specific pattern. */

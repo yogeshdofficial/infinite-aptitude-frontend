@@ -39,8 +39,12 @@ function toDetail(row: QuestionRow): QuestionDetail {
 }
 
 /**
- * Full question SELECT with hints / formulas / mistakes aggregated in one
- * query — avoids N+1 round trips to the DB.
+ * Full question SELECT with hints / formulas / mistakes aggregated via
+ * correlated subqueries — NOT a multi-table LEFT JOIN. A 3-way join here
+ * would fan out (e.g. 3 hints × 1 formula × 3 mistakes = 9 joined rows),
+ * duplicating every value before GROUP_CONCAT even runs. Subqueries
+ * aggregate each child table independently, so counts stay correct
+ * regardless of how many hints/formulas/mistakes a question has.
  */
 const DETAIL_SELECT = `
   SELECT
@@ -58,16 +62,13 @@ const DETAIL_SELECT = `
     q.final_answer,
     q.traditional_solution,
     q.shortcut_solution,
-    GROUP_CONCAT(DISTINCT qh.hint,    '||') AS hints_raw,
-    GROUP_CONCAT(DISTINCT qf.formula, '||') AS formulas_raw,
-    GROUP_CONCAT(DISTINCT qm.mistake, '||') AS mistakes_raw
+    (SELECT GROUP_CONCAT(hint,    '||') FROM question_hints    WHERE question_id = q.id) AS hints_raw,
+    (SELECT GROUP_CONCAT(formula, '||') FROM question_formulas WHERE question_id = q.id) AS formulas_raw,
+    (SELECT GROUP_CONCAT(mistake, '||') FROM question_mistakes WHERE question_id = q.id) AS mistakes_raw
   FROM questions q
-  LEFT JOIN question_hints    qh ON qh.question_id = q.id
-  LEFT JOIN question_formulas qf ON qf.question_id = q.id
-  LEFT JOIN question_mistakes qm ON qm.question_id = q.id
 `;
 
-const DETAIL_GROUP = `GROUP BY q.id`;
+const DETAIL_GROUP = "";
 
 export class QuestionRepository {
   // ── single question ───────────────────────────────────────────────────────
@@ -88,6 +89,32 @@ export class QuestionRepository {
     const result = await db.query(`SELECT * FROM questions WHERE id = ?`, [id]);
     if (!result.values?.length) return null;
     return QuestionSchema.parse(result.values[0]);
+  }
+
+  /**
+   * Hints / formulas / mistakes only — the question's own columns
+   * (text, solutions) are already on hand from the list query, so the
+   * drawer only needs this much smaller follow-up fetch.
+   */
+  async getExtrasById(
+    id: string,
+  ): Promise<{ hints: string[]; formulas: string[]; mistakes: string[] }> {
+    const db = sqliteService.getDB();
+    const result = await db.query(
+      `SELECT
+         (SELECT GROUP_CONCAT(hint,    '||') FROM question_hints    WHERE question_id = ?) AS hints_raw,
+         (SELECT GROUP_CONCAT(formula, '||') FROM question_formulas WHERE question_id = ?) AS formulas_raw,
+         (SELECT GROUP_CONCAT(mistake, '||') FROM question_mistakes WHERE question_id = ?) AS mistakes_raw`,
+      [id, id, id],
+    );
+    const row = result.values?.[0] as
+      | { hints_raw: string | null; formulas_raw: string | null; mistakes_raw: string | null }
+      | undefined;
+    return {
+      hints: row?.hints_raw ? row.hints_raw.split("||") : [],
+      formulas: row?.formulas_raw ? row.formulas_raw.split("||") : [],
+      mistakes: row?.mistakes_raw ? row.mistakes_raw.split("||") : [],
+    };
   }
 
   // ── by chapter ────────────────────────────────────────────────────────────
