@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { questionRepository } from "@/db/repositories/questionRepository";
 import { CopyButton } from "@/components/CopyButton";
+import { SaveButton } from "@/components/SaveButton";
 import { Badge } from "@/components/ui/badge";
 import { LuChevronUp, LuX, LuLightbulb } from "react-icons/lu";
 
@@ -51,6 +52,7 @@ export default function QuestionCard({
   const { data: extras, isLoading: extrasLoading } = useQuery({
     queryKey: ["questionExtras", question.id],
     queryFn: () => questionRepository.getExtrasById(question.id),
+    enabled: showSolution,
     staleTime: Infinity,
   });
 
@@ -59,7 +61,7 @@ export default function QuestionCard({
       <CardContent className="p-0">
         {/* Question */}
         <div className="relative p-4 pb-3">
-          <div className="pr-8">
+          <div className="pr-[4.5rem]">
             <div className="mb-2.5 flex items-center gap-2">
               <Badge
                 variant="secondary"
@@ -72,10 +74,10 @@ export default function QuestionCard({
               markdown={question.question_text ?? "Question text missing"}
             />
           </div>
-          <CopyButton
-            text={question.question_text ?? ""}
-            className="absolute right-3 top-3"
-          />
+          <div className="absolute right-3 top-3 flex items-center gap-0.5">
+            <SaveButton questionId={question.id} />
+            <CopyButton text={question.question_text ?? ""} />
+          </div>
         </div>
 
         {/* Reveal / Hide toggle */}

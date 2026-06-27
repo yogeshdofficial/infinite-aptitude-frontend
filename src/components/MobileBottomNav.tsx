@@ -4,6 +4,7 @@ import {
   LuBookOpen,
   LuLayoutGrid,
   LuChartBar,
+  LuBookmark,
 } from "react-icons/lu";
 import clsx from "clsx";
 
@@ -11,6 +12,7 @@ const TABS = [
   { to: "/tabs/browse", label: "Browse", icon: LuBookOpen },
   { to: "/tabs/practice", label: "Practice", icon: LuDumbbell },
   { to: "/tabs/patterns", label: "Patterns", icon: LuLayoutGrid },
+  { to: "/tabs/saved", label: "Saved", icon: LuBookmark },
   { to: "/tabs/progress", label: "Progress", icon: LuChartBar },
 ];
 

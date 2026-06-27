@@ -8,6 +8,7 @@ import { chapterRepository } from "@/db/repositories/chapterRepository";
 import GeneralHeader from "@/feautures/general-header";
 import { MarkdownViewer } from "@/components/MarkdownViewer";
 import { CopyButton } from "@/components/CopyButton";
+import { SaveButton } from "@/components/SaveButton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -259,6 +260,7 @@ function StudyCard({
               <Badge variant="secondary" className="rounded-full text-[10px]">
                 Q{question.question_number}
               </Badge>
+              <SaveButton questionId={question.id} className="size-6" />
               {/* Keyboard hint — desktop only */}
               <button
                 onClick={() => setShowKeyHint((v) => !v)}

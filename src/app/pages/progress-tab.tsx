@@ -8,7 +8,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import type { Chapter } from "@/lib/schema";
-import { LuBookOpen, LuLayoutGrid, LuCircleDashed } from "react-icons/lu";
+import { useSavedQuestionIds } from "@/hooks/use-saved-questions";
+import { LuBookOpen, LuLayoutGrid, LuCircleDashed, LuBookmark } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
 // ── Single chapter row ────────────────────────────────────────────────────────
@@ -64,9 +65,11 @@ function ChapterProgressRow({ chapter }: Readonly<{ chapter: Chapter }>) {
 function SummaryStats({
   chapterCount,
   patternData,
+  savedCount,
 }: {
   chapterCount: number;
   patternData: { patterns: number; questions: number };
+  savedCount: number;
 }) {
   const stats = [
     {
@@ -90,25 +93,44 @@ function SummaryStats({
       color: "text-emerald-500",
       bg: "bg-emerald-500/10",
     },
+    {
+      icon: LuBookmark,
+      label: "Saved",
+      value: savedCount,
+      color: "text-amber-500",
+      bg: "bg-amber-500/10",
+      to: "/tabs/saved",
+    },
   ];
 
   return (
-    <div className="grid grid-cols-3 gap-3 mb-8">
-      {stats.map(({ icon: Icon, label, value, color, bg }) => (
-        <Card key={label} className="shadow-sm">
-          <CardContent className="flex flex-col gap-1.5 p-4">
-            <span
-              className={`flex size-8 items-center justify-center rounded-lg ${bg} ${color}`}
-            >
-              <Icon className="size-4" />
-            </span>
-            <span className="text-xl font-bold tracking-tight">
-              {value > 0 ? value.toLocaleString() : "—"}
-            </span>
-            <span className="text-xs text-muted-foreground">{label}</span>
-          </CardContent>
-        </Card>
-      ))}
+    <div className="grid grid-cols-2 gap-3 mb-8 sm:grid-cols-4">
+      {stats.map(({ icon: Icon, label, value, color, bg, to }) => {
+        const card = (
+          <Card
+            className={`shadow-sm ${to ? "transition-all hover:border-primary/30 hover:shadow-md active:scale-[0.98]" : ""}`}
+          >
+            <CardContent className="flex flex-col gap-1.5 p-4">
+              <span
+                className={`flex size-8 items-center justify-center rounded-lg ${bg} ${color}`}
+              >
+                <Icon className="size-4" />
+              </span>
+              <span className="text-xl font-bold tracking-tight">
+                {value > 0 ? value.toLocaleString() : "—"}
+              </span>
+              <span className="text-xs text-muted-foreground">{label}</span>
+            </CardContent>
+          </Card>
+        );
+        return to ? (
+          <Link key={label} to={to} className="block">
+            {card}
+          </Link>
+        ) : (
+          <div key={label}>{card}</div>
+        );
+      })}
     </div>
   );
 }
@@ -125,19 +147,23 @@ export default function ProgressTab() {
     queryFn: () => chapterRepository.getAll(),
   });
 
-  // Aggregate pattern + question counts from already-cached per-chapter data
-  const allPatternQueries = chapters.map((c) =>
-    patternRepository.getCountsByChapter(c.id),
-  );
+  // Aggregate pattern + question counts from already-cached per-chapter data.
+  // The repository calls live inside queryFn (not in the render body) so
+  // they only ever run when the query actually executes, instead of firing
+  // off a fresh batch of promises on every re-render of this component.
   const { data: allPatterns } = useQuery({
     queryKey: ["allPatternCounts", chapters.map((c) => c.id).join(",")],
     queryFn: async () => {
-      const results = await Promise.all(allPatternQueries);
+      const results = await Promise.all(
+        chapters.map((c) => patternRepository.getCountsByChapter(c.id)),
+      );
       return results.flat();
     },
     enabled: chapters.length > 0,
     staleTime: Infinity,
   });
+
+  const { data: savedIds } = useSavedQuestionIds();
 
   const summaryData = {
     patterns: allPatterns?.length ?? 0,
@@ -161,6 +187,7 @@ export default function ProgressTab() {
             <SummaryStats
               chapterCount={chapters.length}
               patternData={summaryData}
+              savedCount={savedIds?.size ?? 0}
             />
           )}
 

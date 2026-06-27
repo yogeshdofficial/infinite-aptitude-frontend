@@ -3,6 +3,7 @@ import { IonRouterOutlet } from "@ionic/react";
 import PracticeTab from "@/app/pages/practice-tab";
 import PatternsTab from "@/app/pages/patterns-tab";
 import ProgressTab from "@/app/pages/progress-tab";
+import SavedPage from "@/app/pages/saved-page";
 import QuestionPage from "@/app/pages/questionPage";
 import ChapterPage from "@/app/pages/ChapterPage";
 import ResourcePage from "@/app/pages/ResourcePage";
@@ -33,6 +34,10 @@ export default function Routes() {
 
       <Route exact path="/tabs/progress">
         <ProgressTab />
+      </Route>
+
+      <Route exact path="/tabs/saved">
+        <SavedPage />
       </Route>
 
       <Route exact path="/tabs/browse">

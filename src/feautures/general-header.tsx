@@ -13,6 +13,7 @@ const NAV_LINKS = [
   { to: "/tabs/browse", label: "Browse" },
   { to: "/tabs/practice", label: "Practice" },
   { to: "/tabs/patterns", label: "Patterns" },
+  { to: "/tabs/saved", label: "Saved" },
   { to: "/tabs/progress", label: "Progress" },
 ];
 

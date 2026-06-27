@@ -148,6 +148,15 @@
   .markdown {
     @apply text-sm text-foreground;
     line-height: 1.8;
+    /* Comfortable measure for long solution text — avoids overly long
+       lines on wide desktop panels where the parent doesn't already cap
+       width itself. */
+    max-width: 70ch;
+  }
+  @media (min-width: 1024px) {
+    .markdown {
+      font-size: 0.9375rem; /* 15px — easier sustained reading on desktop */
+    }
   }
   .markdown > :first-child { margin-top: 0; }
   .markdown > :last-child  { margin-bottom: 0; }

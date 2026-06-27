@@ -69,6 +69,16 @@ const DETAIL_SELECT = `
   FROM questions q
 `;
 
+/**
+ * `question_number` is stored as TEXT (it occasionally has non-numeric
+ * suffixes like "12a"), so a plain `ORDER BY question_number ASC` sorts
+ * lexicographically — "10" comes before "2". CAST-ing to INTEGER for the
+ * primary sort fixes that for the common case, with the raw text as a
+ * tie-breaker so "12" sorts before "12a" when both cast to 12.
+ */
+const NUMERIC_ORDER = `CAST(question_number AS INTEGER) ASC, question_number ASC`;
+const NUMERIC_ORDER_Q = `CAST(q.question_number AS INTEGER) ASC, q.question_number ASC`;
+
 export class QuestionRepository {
   // ── single question ───────────────────────────────────────────────────────
 
@@ -130,7 +140,7 @@ export class QuestionRepository {
       const result = await db.query(
         `SELECT * FROM questions
          WHERE chapter_id = ?
-         ORDER BY rowid`,
+         ORDER BY ${NUMERIC_ORDER}`,
         [chapterId],
       );
       return QuestionSchema.array().parse(result.values ?? []);
@@ -143,7 +153,7 @@ export class QuestionRepository {
       const result = await db.query(
         `${DETAIL_SELECT}
          WHERE q.chapter_id = ?
-         ORDER BY q.question_number ASC`,
+         ORDER BY ${NUMERIC_ORDER_Q}`,
         [chapterId],
       );
       return (result.values ?? []).map((r) => toDetail(r as QuestionRow));
@@ -158,7 +168,7 @@ export class QuestionRepository {
       const result = await db.query(
         `SELECT * FROM questions
          WHERE pattern_id = ?
-         ORDER BY question_number ASC`,
+         ORDER BY ${NUMERIC_ORDER}`,
         [patternId],
       );
       return QuestionSchema.array().parse(result.values ?? []);
@@ -171,7 +181,7 @@ export class QuestionRepository {
       const result = await db.query(
         `${DETAIL_SELECT}
          WHERE q.pattern_id = ?
-         ORDER BY q.question_number ASC`,
+         ORDER BY ${NUMERIC_ORDER_Q}`,
         [patternId],
       );
       return (result.values ?? []).map((r) => toDetail(r as QuestionRow));
@@ -189,7 +199,7 @@ export class QuestionRepository {
       const result = await db.query(
         `SELECT * FROM questions
          WHERE chapter_id = ? AND difficulty = ?
-         ORDER BY question_number ASC`,
+         ORDER BY ${NUMERIC_ORDER}`,
         [chapterId, difficulty],
       );
       return QuestionSchema.array().parse(result.values ?? []);

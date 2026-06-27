@@ -150,7 +150,12 @@ export default function ChapterPage() {
                 <LuGraduationCap className="mr-1.5 size-4" />
                 Learn
               </Button>
-              <Button variant="outline" className="rounded-xl font-semibold">
+              <Button
+                variant="outline"
+                className="rounded-xl font-semibold"
+                disabled
+                title="Quiz mode is coming soon"
+              >
                 Quiz
               </Button>
             </div>
