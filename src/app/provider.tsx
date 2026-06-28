@@ -2,10 +2,11 @@ import type React from "react";
 import { KonstaProvider } from "konsta/react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 interface ProviderProps {
   children: React.ReactNode;
 }
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 /**
  * All data lives in a read-only SQLite database that never changes at runtime.
@@ -20,9 +21,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: Infinity,          // static data — never re-fetch
-      gcTime: Infinity,             // keep in memory for the whole session
-      refetchOnWindowFocus: false,  // no point checking a local DB on focus
+      staleTime: Infinity,
+      gcTime: Infinity,
+      refetchOnWindowFocus: false,
       retry: 1,
     },
   },
@@ -30,7 +31,7 @@ const queryClient = new QueryClient({
 
 export default function Provider({ children }: Readonly<ProviderProps>) {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <KonstaProvider theme="parent">{children}</KonstaProvider>

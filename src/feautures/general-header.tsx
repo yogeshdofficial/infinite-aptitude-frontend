@@ -17,7 +17,6 @@ const NAV_LINKS = [
   { to: "/tabs/progress", label: "Progress" },
 ];
 
-/** Derive the active top-level nav item from the current path. */
 function useActiveSection() {
   const { pathname } = useLocation();
   return NAV_LINKS.find(({ to }) =>
@@ -27,16 +26,10 @@ function useActiveSection() {
   )?.label ?? null;
 }
 
-/**
- * On deep pages (e.g. chapter → learn), show a lightweight breadcrumb so
- * users can jump back without using the hardware back button. Only rendered
- * on desktop (hidden md:flex).
- */
 function DesktopBreadcrumb({ title }: { title?: string }) {
   const { pathname } = useLocation();
   const section = useActiveSection();
 
-  // Breadcrumb is only meaningful on pages deeper than the tab root
   const isDeep =
     title &&
     section &&
@@ -44,7 +37,6 @@ function DesktopBreadcrumb({ title }: { title?: string }) {
 
   if (!isDeep) return null;
 
-  // Find the parent tab link
   const parent = NAV_LINKS.find(({ to }) =>
     to !== "/tabs/browse" ? pathname.startsWith(to) : false,
   );
@@ -72,19 +64,26 @@ export default function GeneralHeader({ title }: Readonly<GeneralHeaderProps>) {
 
   return (
     <>
+      {/*
+       * We keep IonHeader/IonToolbar so Ionic can correctly calculate
+       * IonContent's safe-area and scroll offset. Dark mode on these
+       * elements is handled by the Ionic CSS variable bridge in index.css:
+       * --ion-toolbar-background and --ion-background-color are set on
+       * `.dark` so they inherit through Ionic's shadow roots automatically.
+       */}
       <IonHeader className="ion-no-border">
         <IonToolbar>
-          <div className="flex h-14 items-center justify-between px-4 md:px-6 border-b border-border/60">
+          <div className="flex h-14 items-center justify-between bg-background px-4 md:px-6 border-b border-border/60">
             {/* Brand */}
             <Link
               to="/tabs/browse"
-              className="font-heading text-base font-semibold tracking-tight shrink-0"
+              className="font-heading text-base font-semibold tracking-tight text-foreground shrink-0"
             >
               Infinite Aptitude
             </Link>
 
-            {/* Center — nav links on desktop */}
-            <div className="hidden md:flex items-center gap-1">
+            {/* Desktop nav links */}
+            <nav className="hidden md:flex items-center gap-1" aria-label="Main navigation">
               {NAV_LINKS.map(({ to, label }) => {
                 const active =
                   location.pathname === to ||
@@ -105,9 +104,9 @@ export default function GeneralHeader({ title }: Readonly<GeneralHeaderProps>) {
                   </Link>
                 );
               })}
-            </div>
+            </nav>
 
-            {/* Right side — breadcrumb on deep pages, mode toggle always */}
+            {/* Right: breadcrumb on deep pages + theme toggle */}
             <div className="flex items-center gap-3 shrink-0">
               <DesktopBreadcrumb title={title} />
               <ModeToggle />
@@ -116,7 +115,8 @@ export default function GeneralHeader({ title }: Readonly<GeneralHeaderProps>) {
         </IonToolbar>
       </IonHeader>
 
-      {/* Mobile bottom tab bar */}
+      {/* Mobile bottom tab bar — rendered outside IonHeader so it sits
+          at the bottom of IonPage via its own fixed positioning */}
       <MobileBottomNav />
     </>
   );

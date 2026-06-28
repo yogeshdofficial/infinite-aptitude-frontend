@@ -5,6 +5,13 @@ import {
 } from "@capacitor-community/sqlite";
 import { Capacitor } from "@capacitor/core";
 
+/**
+ * Versioned localStorage key. Bump the version string whenever you ship
+ * a new database (schema change or content update) so all clients
+ * re-seed automatically on next startup.
+ */
+const DB_SEED_KEY = "ia:db:seeded:v1";
+
 class SQLiteService {
   private sqlite = new SQLiteConnection(CapacitorSQLite);
   private db: SQLiteDBConnection | null = null;
@@ -16,11 +23,25 @@ class SQLiteService {
     this.isWeb = Capacitor.getPlatform() === "web";
 
     if (this.isWeb) {
+      // Wait for the jeep-sqlite custom element to be defined and ready.
       await customElements.whenDefined("jeep-sqlite");
       await this.sqlite.initWebStore();
-    }
 
-    await CapacitorSQLite.copyFromAssets({});
+      // copyFromAssets copies the bundled DB into IndexedDB (jeep-sqlite's
+      // storage layer). Once it's there it persists across reloads, so we
+      // only need to do this on the very first launch. A versioned
+      // localStorage flag lets us skip the round-trip every other time,
+      // which meaningfully speeds up subsequent startups.
+      if (!localStorage.getItem(DB_SEED_KEY)) {
+        await CapacitorSQLite.copyFromAssets({});
+        localStorage.setItem(DB_SEED_KEY, "1");
+      }
+    } else {
+      // On Android/iOS, copyFromAssets already checks whether the DB file
+      // exists in the Documents directory before copying; this is fast on
+      // subsequent launches. We leave the native path unchanged.
+      await CapacitorSQLite.copyFromAssets({});
+    }
 
     const consistency = (await this.sqlite.checkConnectionsConsistency())
       .result;
@@ -63,7 +84,6 @@ class SQLiteService {
     if (!this.db) {
       throw new Error("Database not initialized");
     }
-
     return this.db;
   }
 

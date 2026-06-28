@@ -5,6 +5,20 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>infinite-aptitude-frontend</title>
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("vite-ui-theme");
+          var systemDark = window.matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches;
+          var isDark =
+            stored === "dark" ||
+            ((!stored || stored === "system") && systemDark);
+          document.documentElement.classList.add(isDark ? "dark" : "light");
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

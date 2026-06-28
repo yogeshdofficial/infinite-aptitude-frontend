@@ -2,7 +2,6 @@
 @import "konsta/react/theme.css";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/inter";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -50,6 +49,7 @@
 }
 
 :root {
+  /* ── shadcn / Tailwind design tokens ──────────────────────────── */
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
@@ -82,9 +82,36 @@
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.015 286.067);
+
+  /* ── Ionic CSS variable bridge (light) ────────────────────────────
+     Maps Ionic's own properties to our design tokens so that
+     IonApp, IonPage, IonContent, IonHeader, IonToolbar all use
+     the same colours as our shadcn components.
+     CSS custom properties are inherited through shadow DOM boundaries,
+     so these cascade into Ionic's internal shadow roots automatically. */
+  --ion-background-color: oklch(1 0 0);
+  --ion-background-color-rgb: 255, 255, 255;
+  --ion-text-color: oklch(0.141 0.005 285.823);
+  --ion-text-color-rgb: 18, 18, 20;
+  --ion-toolbar-background: oklch(1 0 0);
+  --ion-toolbar-color: oklch(0.141 0.005 285.823);
+  --ion-toolbar-border-color: transparent;
+  --ion-item-background: oklch(1 0 0);
+  --ion-card-background: oklch(1 0 0);
+  --ion-border-color: oklch(0.92 0.004 286.32);
+  --ion-color-primary: oklch(0.5 0.134 242.749);
+  --ion-color-primary-rgb: 46, 99, 186;
+  --ion-color-primary-contrast: oklch(0.977 0.013 236.62);
+  --ion-color-primary-contrast-rgb: 249, 249, 252;
+  --ion-color-primary-shade: oklch(0.44 0.118 242.749);
+  --ion-color-primary-tint: oklch(0.56 0.148 242.749);
+  --ion-tab-bar-background: oklch(1 0 0);
+  --ion-tab-bar-border-color: oklch(0.92 0.004 286.32);
+  --ion-safe-area-top: 0px;
 }
 
 .dark {
+  /* ── shadcn / Tailwind design tokens (dark) ───────────────────── */
   --background: oklch(0.141 0.005 285.823);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.21 0.006 285.885);
@@ -116,6 +143,22 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
+
+  /* ── Ionic CSS variable bridge (dark) ─────────────────────────────
+     Overrides Ionic's hard-coded light defaults when .dark is active. */
+  --ion-background-color: oklch(0.141 0.005 285.823);
+  --ion-background-color-rgb: 18, 18, 20;
+  --ion-text-color: oklch(0.985 0 0);
+  --ion-text-color-rgb: 250, 250, 250;
+  --ion-toolbar-background: oklch(0.141 0.005 285.823);
+  --ion-toolbar-color: oklch(0.985 0 0);
+  --ion-toolbar-border-color: transparent;
+  --ion-item-background: oklch(0.141 0.005 285.823);
+  --ion-card-background: oklch(0.21 0.006 285.885);
+  --ion-border-color: oklch(1 0 0 / 10%);
+  --ion-color-primary: oklch(0.685 0.169 237.323);
+  --ion-tab-bar-background: oklch(0.141 0.005 285.823);
+  --ion-tab-bar-border-color: oklch(1 0 0 / 10%);
 }
 
 @layer base {
@@ -130,17 +173,21 @@
   }
 }
 
-/* Mobile bottom nav safe area */
+/* ── Mobile bottom nav safe area ──────────────────────────────────────────── */
 .mobile-bottom-nav {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* Add bottom padding to ion-content scroll on mobile so content isn't hidden
-   behind the fixed bottom nav bar (56px bar + optional safe area) */
+/* IonContent scroll padding on mobile: compensate for the fixed bottom nav */
 @media (max-width: 767px) {
   ion-content::part(scroll) {
     padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
   }
+}
+
+/* Force Ionic's ion-content to always use our background colour */
+ion-content {
+  --background: var(--ion-background-color);
 }
 
 @layer components {
@@ -148,14 +195,11 @@
   .markdown {
     @apply text-sm text-foreground;
     line-height: 1.8;
-    /* Comfortable measure for long solution text — avoids overly long
-       lines on wide desktop panels where the parent doesn't already cap
-       width itself. */
     max-width: 70ch;
   }
   @media (min-width: 1024px) {
     .markdown {
-      font-size: 0.9375rem; /* 15px — easier sustained reading on desktop */
+      font-size: 0.9375rem;
     }
   }
   .markdown > :first-child { margin-top: 0; }
@@ -206,8 +250,7 @@
     padding: 0;
   }
 
-  /* ── Blockquote — used for solution steps & key results ────────── */
-  /* Signature element: textbook margin-annotation feel */
+  /* ── Blockquote ────────────────────────────────────────────────── */
   .markdown blockquote {
     @apply my-4 rounded-r-xl border-l-[3px] border-primary py-3 pl-4 pr-3.5;
     background: color-mix(in oklch, var(--color-primary) 6%, transparent);
@@ -220,7 +263,7 @@
   /* ── Dividers ──────────────────────────────────────────────────── */
   .markdown hr { @apply my-5 border-border/50; }
 
-  /* ── Tables — horizontally scrollable ─────────────────────────── */
+  /* ── Tables ────────────────────────────────────────────────────── */
   .markdown table {
     @apply my-4 w-full border-collapse text-[0.8125rem];
     display: block;
@@ -245,8 +288,7 @@
   .markdown img { @apply my-3 max-w-full rounded-xl; }
 }
 
-/* ── KaTeX math — critical overflow fix ──────────────────────────────────── */
-/* Display math (block equations) must scroll, never break the layout */
+/* ── KaTeX math ───────────────────────────────────────────────────────────── */
 .markdown .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
@@ -265,7 +307,11 @@
   background: color-mix(in oklch, var(--color-primary) 30%, transparent);
   border-radius: 2px;
 }
-/* Inline math stays at current font size, no size inflation */
 .markdown .katex {
   font-size: 1em;
+}
+
+/* ── KaTeX dark mode: inherit text colour ─────────────────────────────────── */
+.dark .markdown .katex {
+  color: inherit;
 }

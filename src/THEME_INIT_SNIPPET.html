@@ -1,0 +1,19 @@
+<!--
+  ADD THIS SNIPPET to your index.html <head>, BEFORE any other scripts.
+  It applies the saved theme synchronously so there's no flash of the
+  wrong colour on startup (FOUC — flash of unstyled content).
+
+  If your project already has an index.html, paste just the <script> block.
+-->
+<script>
+  (function () {
+    try {
+      var stored = localStorage.getItem("vite-ui-theme");
+      var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      var isDark =
+        stored === "dark" ||
+        (!stored || stored === "system") && systemDark;
+      document.documentElement.classList.add(isDark ? "dark" : "light");
+    } catch (e) {}
+  })();
+</script>

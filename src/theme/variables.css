@@ -1,2 +1,7 @@
-/* For information on how to create your own theme, please refer to:
-https://ionicframework.com/docs/theming/ */
+/**
+ * This file is intentionally minimal — all Ionic CSS variable overrides
+ * (the "Ionic bridge") live in app/index.css alongside the shadcn tokens
+ * so they're co-located and stay in sync.
+ *
+ * For Ionic theming docs: https://ionicframework.com/docs/theming/
+ */

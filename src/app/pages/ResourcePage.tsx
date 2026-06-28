@@ -20,6 +20,11 @@ export default function ResourcePage() {
 
   return (
     <IonPage>
+      {/*
+       * Plain <header> here (not IonHeader) because this page has no bottom
+       * nav and doesn't need Ionic's safe-area offset calculations.
+       * bg-background ensures it respects dark mode via Tailwind.
+       */}
       <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border/60 bg-background px-6">
         <Button
           variant="ghost"
@@ -31,7 +36,7 @@ export default function ResourcePage() {
           <LuArrowLeft className="size-5" />
         </Button>
 
-        <h1 className="flex-1 truncate font-heading text-sm font-semibold">
+        <h1 className="flex-1 truncate font-heading text-sm font-semibold text-foreground">
           {title}
         </h1>
 
@@ -41,9 +46,7 @@ export default function ResourcePage() {
       <IonContent fullscreen>
         <div className="mx-auto max-w-3xl px-6 py-8">
           {markdown ? (
-            <article className="prose prose-sm max-w-none">
-              <MarkdownViewer markdown={markdown} />
-            </article>
+            <MarkdownViewer markdown={markdown} />
           ) : (
             <p className="text-center text-sm text-muted-foreground">
               No content available.
